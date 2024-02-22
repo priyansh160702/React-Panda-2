@@ -1,0 +1,51 @@
+.items {
+  max-height: 20rem;
+  overflow-x: hidden;
+}
+
+#amount {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem auto;
+}
+
+#amount .amount-heading {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+#amount .total-amount {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+#button {
+  display: flex;
+  margin-left: 22.6rem;
+}
+
+#button button {
+  font: inherit;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid #8a2b06;
+  padding: 0.5rem 2rem;
+  border-radius: 25px;
+  margin-left: 1rem;
+}
+
+#button div button .hidden {
+  visibility: hidden;
+}
+
+#button button:active,
+#button button:hover {
+  background-color: #5a1a01;
+  border-color: #5a1a01;
+  color: white;
+}
+
+#button .order-button {
+  background-color: #8a2b06;
+  color: white;
+}

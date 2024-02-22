@@ -1,0 +1,31 @@
+#item-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#item-container:last-child {
+  border-bottom: none;
+}
+
+#item-container li {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+li span h3 {
+  font-size: 1rem;
+}
+
+li span p {
+  font-style: italic;
+}
+
+li .price {
+  color: #ad5502;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}

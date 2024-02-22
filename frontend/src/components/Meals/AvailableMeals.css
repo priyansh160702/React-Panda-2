@@ -1,0 +1,20 @@
+ul li {
+  list-style: none;
+}
+
+ul li:last-child {
+  border-bottom: none;
+}
+
+.loading-para {
+  text-align: center;
+  color: white;
+  margin-top: 1rem;
+}
+
+.error-msg {
+  text-align: center;
+  color: red;
+  font-size: 2rem;
+  margin-top: 1rem;
+}
