@@ -1,5 +1,6 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import CartButton from "./Cart/CartButton";
+import { Link, useLocation } from "react-router-dom";
 import image from "../img/meals.jpg";
 
 import "./Header.css";
@@ -7,18 +8,55 @@ import "./Header.css";
 const Header = () => {
   let isLoggedIn = false;
 
+  const location = useLocation();
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case "/":
+        document.title = "React Panda";
+        break;
+      case "/auth/login":
+        document.title = "Login";
+        break;
+      case "/auth/signup":
+        document.title = "Signup";
+        break;
+    }
+  }, [location.pathname]);
+
   return (
-    <Fragment>
+    <header>
       <nav id="nav-container">
         <div className="container">
-          <h1>React Panda</h1>
-          {!isLoggedIn && <CartButton />}
+          <Link
+            id="heading"
+            to="/"
+            className={location.pathname !== "/" ? "heading-centered" : ""}
+          >
+            React Panda
+          </Link>
+          {isLoggedIn && (
+            <Fragment>
+              <CartButton />
+              <button type="button">Logout</button>
+            </Fragment>
+          )}
+          {!isLoggedIn && (
+            <Link
+              to="/auth/login"
+              style={
+                location.pathname === "/auth/login" ? { display: "none" } : null
+              }
+            >
+              Login
+            </Link>
+          )}
         </div>
       </nav>
       <div className="img">
         <img src={image} />
       </div>
-    </Fragment>
+    </header>
   );
 };
 
