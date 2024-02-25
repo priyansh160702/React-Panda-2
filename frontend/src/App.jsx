@@ -2,8 +2,7 @@ import { Fragment, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "./components/RootLayout";
 import HomePage from "./pages/HomePage";
-import SignupPage from "./pages/SignupPage";
-import LoginPage from "./pages/LoginPage";
+import Authentication from "./pages/Authentication";
 
 function App() {
   const router = createBrowserRouter([
@@ -12,8 +11,7 @@ function App() {
       element: <RootLayout />,
       children: [
         { index: true, element: <HomePage /> },
-        { path: "auth/signup", element: <SignupPage /> },
-        { path: "auth/login", element: <LoginPage /> },
+        { path: "auth", element: <Authentication /> },
       ],
     },
   ]);
