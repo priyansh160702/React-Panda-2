@@ -134,6 +134,15 @@ export const action = async ({ request }) => {
     errors.emailErrorMessage = "This field cannot be empty";
   }
 
+  if (
+    !emailIsValid ||
+    !passwordIsValid ||
+    !confirmPasswordIsValid ||
+    email.length === 0
+  ) {
+    return errors;
+  }
+
   const signupData = {
     email,
     password,
@@ -158,11 +167,9 @@ export const action = async ({ request }) => {
     console.log(resData.message);
   }
 
-  if (Object.keys(errors).length > 0) {
-    return errors;
-  }
-
   if (response.ok) {
     return redirect("/auth/login");
+  } else {
+    return errors;
   }
 };
