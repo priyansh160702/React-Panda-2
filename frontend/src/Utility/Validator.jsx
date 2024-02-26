@@ -10,3 +10,11 @@ export const validatePassword = (password) => {
 
   return true;
 };
+
+export const validateConfirmPassword = (confirmPassword, password) => {
+  if (confirmPassword !== password) {
+    return false;
+  }
+
+  return true;
+};

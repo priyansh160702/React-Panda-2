@@ -1,6 +1,6 @@
 import { Fragment, useEffect } from "react";
 import CartButton from "./Cart/CartButton";
-import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import image from "../img/meals.jpg";
 
 import "./Header.css";
@@ -10,20 +10,21 @@ const Header = () => {
 
   const location = useLocation();
 
-  const [searchParams] = useSearchParams();
-  const mode = searchParams.get("mode");
-
   useEffect(() => {
-    if (location.pathname === "/") {
-      document.title = "React Panda";
-    } else if (mode === "signup") {
-      document.title = "Signup";
-    } else if (mode === "login") {
-      document.title = "Login";
-    } else {
-      document.title = "React Panda";
+    switch (location.pathname) {
+      case "/":
+        document.title = "Home";
+        break;
+      case "/about":
+        document.title = "About";
+        break;
+      case "/login":
+        document.title = "Login";
+        break;
+      default:
+        document.title = "My App";
     }
-  }, [location.pathname, mode]);
+  }, [location.pathname]);
 
   return (
     <header>
@@ -44,8 +45,13 @@ const Header = () => {
           )}
           {!isLoggedIn && (
             <Link
-              to="/auth?mode=login"
-              style={location.pathname !== "/" ? { display: "none" } : null}
+              to="/auth/login"
+              style={
+                location.pathname === "/auth/login" ||
+                location.pathname === "/auth/signup"
+                  ? { display: "none" }
+                  : null
+              }
             >
               Login
             </Link>

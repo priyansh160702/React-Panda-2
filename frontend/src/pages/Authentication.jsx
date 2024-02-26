@@ -1,8 +1,7 @@
-import { Fragment, useRef, useState } from "react";
-import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useRef, useState } from "react";
 
 import Card from "../Utility/Card";
-import { validateEmail, validatePassword } from "../Utility/Validator";
 import "./Authentication.css";
 
 const Authentication = () => {
@@ -16,14 +15,6 @@ const Authentication = () => {
 
   const navigate = useNavigate();
 
-  const [searchParams] = useSearchParams();
-  const mode = searchParams.get("mode") || "login";
-
-  let isEmail;
-  let isPassword;
-
-  const isSignup = mode === "signup";
-
   const formSubmitHandler = (e) => {
     e.preventDefault();
 
@@ -31,8 +22,8 @@ const Authentication = () => {
     const enteredPassword = passwordInputRef.current.value;
     const enteredConfirmPassword = confirmPasswordInputRef.current.value;
 
-    isEmail = validateEmail(enteredEmail);
-    isPassword = validatePassword(enteredPassword);
+    const isEmail = validateEmail(enteredEmail);
+    const isPassword = validatePassword(enteredPassword);
 
     if (!isEmail) {
       setEmailIsValid(false);
@@ -42,29 +33,22 @@ const Authentication = () => {
       setPasswordIsValid(false);
     }
 
-    if (isSignup) {
-      if (enteredConfirmPassword !== enteredPassword) {
-        setConfirmPasswordIsValid(false);
-      }
-
-      if (isEmail && isPassword && enteredConfirmPassword === enteredPassword) {
-        return navigate("/auth?mode=login");
-      }
+    if (enteredConfirmPassword !== enteredPassword) {
+      setConfirmPasswordIsValid(false);
     }
 
-    if (isEmail && isPassword) {
-      return navigate("/auth?mode=signup");
-    }
+    if (isEmail && isPassword && enteredConfirmPassword === enteredPassword)
+      return navigate("/auth?mode=login");
   };
 
   return (
     <Card className="form-container">
       <div className="form">
-        <h3>{isSignup ? "Signup" : "Login"}</h3>
+        <h3>Signup</h3>
         <form onSubmit={formSubmitHandler} noValidate>
           <label htmlFor="email">Email</label>
           <input type="email" id="email" name="email" ref={emailInputRef} />
-          {isSignup && !emailIsValid && (
+          {!emailIsValid && (
             <p className="error-message">Enter a valid email.</p>
           )}
           <label htmlFor="password">Password</label>
@@ -74,23 +58,18 @@ const Authentication = () => {
             name="password"
             ref={passwordInputRef}
           />
-          {isSignup && !passwordIsValid && (
+          {!passwordIsValid && (
             <p className="error-message">
-              Password should be at least 5 characters.
+              Password should be longer than 5 characters.
             </p>
           )}
-
-          {isSignup && (
-            <Fragment>
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                ref={confirmPasswordInputRef}
-              />
-            </Fragment>
-          )}
+          <label htmlFor="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            ref={confirmPasswordInputRef}
+          />
           {!confirmPasswordIsValid && (
             <p className="error-message">
               Not matching with the entered password.
@@ -98,10 +77,7 @@ const Authentication = () => {
           )}
           <button type="submit">Submit</button>
           <p>
-            {isSignup ? "Already signed up?" : "New Customer?"}{" "}
-            <Link to={isSignup ? "/auth?mode=login" : "/auth?mode=signup"}>
-              {isSignup ? "Login" : "Signup"}
-            </Link>
+            Already signed up? <Link to="/auth?mode=login">Login</Link>
           </p>
         </form>
       </div>
@@ -110,3 +86,5 @@ const Authentication = () => {
 };
 
 export default Authentication;
+
+export const action = async () => {};
