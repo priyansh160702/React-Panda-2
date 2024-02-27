@@ -21,11 +21,9 @@ app.use(mealsRoutes);
 app.use("/auth", authRoutes);
 
 app.use((error, req, res, next) => {
-  const statusCode = error.statusCode;
-  const msg = error.message;
-  res.json({ message: msg, statusCode });
-
-  console.log(error);
+  let statusCode = error.statusCode;
+  let msg = error.message;
+  return res.status(statusCode).json({ message: msg });
 });
 
 mongoConnect((client) => {
