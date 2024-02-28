@@ -1,12 +1,20 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import CartButton from "./Cart/CartButton";
-import { Link, useLocation } from "react-router-dom";
+import { Link, redirect, useLocation } from "react-router-dom";
 import image from "../img/meals.jpg";
 
 import "./Header.css";
 
 const Header = () => {
-  let isLoggedIn = false;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const location = useLocation();
 
@@ -26,6 +34,12 @@ const Header = () => {
     }
   }, [location.pathname]);
 
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    setIsLoggedIn(false);
+  };
+
   return (
     <header>
       <nav id="nav-container">
@@ -40,7 +54,9 @@ const Header = () => {
           {isLoggedIn && (
             <Fragment>
               <CartButton />
-              <button type="button">Logout</button>
+              <button type="button" onClick={logoutHandler}>
+                Logout
+              </button>
             </Fragment>
           )}
           {!isLoggedIn && (

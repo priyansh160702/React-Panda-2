@@ -1,9 +1,9 @@
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 const getDb = require("../util/database").getDb;
-const ErrorHandler = require("../util/ErrorHandler");
 
 exports.signUp = async (req, res, next) => {
   try {
@@ -69,5 +69,19 @@ exports.login = async (req, res, next) => {
     throw err;
   }
 
-  return res.status(200).json({ message: "Logged in successfully." });
+  // Creating the JWT
+  const token = jwt.sign(
+    {
+      email: user.email,
+      userId: user._id.toString(),
+    },
+    "somesupersecretlongstring",
+    { expiresIn: "1h" }
+  );
+
+  return res.status(200).send({
+    message: "Logged In successfully",
+    token,
+    userId: user._id.toString(),
+  });
 };

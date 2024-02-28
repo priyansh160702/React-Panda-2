@@ -122,8 +122,6 @@ export const action = async ({ request }) => {
     body: JSON.stringify(loginData),
   });
 
-  const resData = await response.json();
-
   if (response.status === 404) {
     errors.emailErrorMessage = resData.message;
   }
@@ -132,9 +130,16 @@ export const action = async ({ request }) => {
     errors.passwordErrorMessage = resData.message;
   }
 
+  const resData = await response.json();
+
+  const userId = `RP${resData.userId}`;
+  const token = resData.token;
+
   if (!response.ok) {
     return errors;
   } else {
+    localStorage.setItem("userId", userId);
+    localStorage.setItem("token", token);
     return redirect("/");
   }
 };

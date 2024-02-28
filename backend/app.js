@@ -22,8 +22,9 @@ app.use("/auth", authRoutes);
 
 app.use((error, req, res, next) => {
   let statusCode = error.statusCode;
-  let msg = error.message;
-  return res.status(statusCode).json({ message: msg });
+  let message = error.message;
+
+  return res.status(statusCode).json({ message });
 });
 
 mongoConnect((client) => {
