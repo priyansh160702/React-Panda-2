@@ -6,15 +6,15 @@ import image from "../img/meals.jpg";
 import "./Header.css";
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const token = localStorage.getItem("token");
+
+  const [isLoggedIn, setIsLoggedIn] = useState(token);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
     if (token) {
       setIsLoggedIn(true);
     }
-  }, []);
+  }, [token]);
 
   const location = useLocation();
 
@@ -52,16 +52,17 @@ const Header = () => {
             React Panda
           </Link>
           {isLoggedIn && (
-            <Fragment>
+            <div>
               <CartButton />
-              <button type="button" onClick={logoutHandler}>
+              <button type="button" className="btn" onClick={logoutHandler}>
                 Logout
               </button>
-            </Fragment>
+            </div>
           )}
           {!isLoggedIn && (
             <Link
               to="/auth/login"
+              className="btn"
               style={
                 location.pathname === "/auth/login" ||
                 location.pathname === "/auth/signup"

@@ -21,8 +21,8 @@ app.use(mealsRoutes);
 app.use("/auth", authRoutes);
 
 app.use((error, req, res, next) => {
-  let statusCode = error.statusCode;
-  let message = error.message;
+  let statusCode = error.statusCode || 500;
+  let message = error.message || "Internal Server Error";
 
   return res.status(statusCode).json({ message });
 });

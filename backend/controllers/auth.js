@@ -42,46 +42,53 @@ exports.signUp = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-  const db = getDb();
+  try {
+    const db = getDb();
 
-  const email = req.body.email;
-  const password = req.body.password;
+    const email = req.body.email;
+    const password = req.body.password;
 
-  const errors = validationResult(req);
+    const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ message: "Validation error", errors });
-  }
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ message: "Validation error", errors });
+    }
 
-  const user = await db.collection("users").findOne({ email });
+    const user = await db.collection("users").findOne({ email });
 
-  if (!user) {
-    const err = new Error("User not found!");
-    err.statusCode = 404;
-    throw err;
-  }
+    if (!user) {
+      const err = new Error("User not found!");
+      err.statusCode = 404;
+      throw err;
+    }
 
-  const isEqual = await bcrypt.compare(password, user.password);
+    const isEqual = await bcrypt.compare(password, user.password);
 
-  if (!isEqual) {
-    const err = new Error("Password does not match!");
-    err.statusCode = 400;
-    throw err;
-  }
+    if (!isEqual) {
+      const err = new Error("Password does not match!");
+      err.statusCode = 400;
+      throw err;
+    }
 
-  // Creating the JWT
-  const token = jwt.sign(
-    {
-      email: user.email,
+    // Creating the JWT
+    const token = jwt.sign(
+      {
+        email: user.email,
+        userId: user._id.toString(),
+      },
+      "somesupersecretlongstring",
+      { expiresIn: "1h" }
+    );
+
+    return res.status(200).send({
+      message: "Logged In successfully",
+      token,
       userId: user._id.toString(),
-    },
-    "somesupersecretlongstring",
-    { expiresIn: "1h" }
-  );
-
-  return res.status(200).send({
-    message: "Logged In successfully",
-    token,
-    userId: user._id.toString(),
-  });
+    });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };

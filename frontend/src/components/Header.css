@@ -13,20 +13,26 @@
 }
 
 #nav-container .container #heading {
+  margin-left: 3.5rem;
   color: white;
   font-size: 2rem;
   font-weight: bold;
   font-size: 2.2rem;
+  background-color: transparent;
 }
 
-#nav-container .container a:nth-child(2) {
+.btn {
+  background-color: transparent;
+  border: none;
   color: white;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: 1.2rem;
+  transition: all 200ms ease-in;
 }
 
-#nav-container .container a:nth-child(2):hover {
-  color: #fffbfb80;
-  transition: all 100ms ease-in-out;
+.btn:hover {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.51);
 }
 
 .img {

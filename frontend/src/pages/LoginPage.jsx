@@ -122,6 +122,8 @@ export const action = async ({ request }) => {
     body: JSON.stringify(loginData),
   });
 
+  const resData = await response.json();
+
   if (response.status === 404) {
     errors.emailErrorMessage = resData.message;
   }
@@ -129,8 +131,6 @@ export const action = async ({ request }) => {
   if (response.status === 400) {
     errors.passwordErrorMessage = resData.message;
   }
-
-  const resData = await response.json();
 
   const userId = `RP${resData.userId}`;
   const token = resData.token;
