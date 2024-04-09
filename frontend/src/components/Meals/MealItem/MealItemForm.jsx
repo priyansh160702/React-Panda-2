@@ -41,7 +41,7 @@ const MealItemForm = (props) => {
           step: "1",
         }}
       />
-      <button>
+      <button className="btn">
         <FontAwesomeIcon icon={faAdd} /> Add
       </button>
       {!quantityIsValid && <p>Enter valid quantity (greater than 0)</p>}

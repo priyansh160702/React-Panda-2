@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { cartAddActions, cartStateActions } from "../../store/cart-state";
+import { cartAddActions, modalStateActions } from "../../store/cart-state";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../Utility/Modal/Modal";
 import CartItem from "./CartItem";
@@ -19,7 +19,7 @@ const Cart = () => {
   const cartHasItems = items.length > 0;
 
   const closeCartHandler = () => {
-    dispatch(cartStateActions.hide());
+    dispatch(modalStateActions.hide());
   };
 
   const itemRemoveHandler = (id) => {

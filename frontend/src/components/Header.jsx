@@ -1,20 +1,12 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect } from "react";
 import CartButton from "./Cart/CartButton";
-import { Link, redirect, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import useAuth from "../Utility/use-auth";
 import image from "../img/meals.jpg";
-
 import "./Header.css";
 
 const Header = () => {
-  const token = localStorage.getItem("token");
-
-  const [isLoggedIn, setIsLoggedIn] = useState(token);
-
-  useEffect(() => {
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  }, [token]);
+  const { logoutHandler, isLoggedIn } = useAuth();
 
   const location = useLocation();
 
@@ -29,16 +21,15 @@ const Header = () => {
       case "/login":
         document.title = "Login";
         break;
+      case "/admin":
+        document.title = "Admin";
+        break;
       default:
         document.title = "My App";
     }
   }, [location.pathname]);
 
-  const logoutHandler = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    setIsLoggedIn(false);
-  };
+  const isAdminPage = location.pathname === "/admin";
 
   return (
     <header>
@@ -51,18 +42,31 @@ const Header = () => {
           >
             React Panda
           </Link>
-          {isLoggedIn && (
-            <div>
-              <CartButton />
-              <button type="button" className="btn" onClick={logoutHandler}>
+          <Link
+            to="/admin"
+            className="header-link"
+            style={isAdminPage ? { display: "none" } : null}
+          >
+            Admin
+          </Link>
+
+          <div>
+            {isLoggedIn && !isAdminPage && <CartButton />}
+            {isLoggedIn && (
+              <button
+                type="button"
+                className="header-link"
+                onClick={logoutHandler}
+              >
                 Logout
               </button>
-            </div>
-          )}
+            )}
+          </div>
+
           {!isLoggedIn && (
             <Link
               to="/auth/login"
-              className="btn"
+              className="header-link"
               style={
                 location.pathname === "/auth/login" ||
                 location.pathname === "/auth/signup"
@@ -75,9 +79,11 @@ const Header = () => {
           )}
         </div>
       </nav>
-      <div className="img">
-        <img src={image} />
-      </div>
+      {location.pathname !== "/admin" && (
+        <div className="img">
+          <img src={image} />
+        </div>
+      )}
     </header>
   );
 };

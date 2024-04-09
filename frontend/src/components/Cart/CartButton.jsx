@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { cartStateActions } from "../../store/cart-state";
+import { modalStateActions } from "../../store/cart-state";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
@@ -32,7 +32,7 @@ const CartButton = () => {
   }, [items]);
 
   const cartShownHandler = () => {
-    dispatch(cartStateActions.show());
+    dispatch(modalStateActions.show());
   };
 
   return (

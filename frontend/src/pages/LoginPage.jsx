@@ -1,11 +1,13 @@
 import { useRef, useEffect, useState } from "react";
-import { Form, Link, redirect, useActionData } from "react-router-dom";
+import { Form, Link, useActionData } from "react-router-dom";
 
 import Card from "../Utility/Card";
-import "./Authentication.css";
-import { validateEmail, validatePassword } from "../Utility/Validator";
+
+import useAuth from "../Utility/use-auth";
 
 const LoginPage = () => {
+  const { logoutHandler } = useAuth();
+
   const [emailErrorMessage, setEmailErrorMessage] = useState(null);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState(null);
 
@@ -35,6 +37,21 @@ const LoginPage = () => {
     setPasswordErrorMessage(null);
   };
 
+  const submitHandler = () => {
+    const remainingMilliseconds = 60 * 60 * 1000;
+
+    setTimeout(() => {
+      logoutHandler();
+    }, remainingMilliseconds);
+  };
+
+  const keyDownHandler = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      submitHandler();
+    }
+  };
+
   return (
     <Card className="form-container">
       <div className="form">
@@ -59,13 +76,16 @@ const LoginPage = () => {
             id="password"
             name="password"
             onChange={passwordChangeHandler}
+            onKeyDown={keyDownHandler}
             style={passwordErrorMessage ? { border: "1px red solid" } : {}}
             required
           />
           {passwordErrorMessage && (
             <p className="error-message">{passwordErrorMessage}</p>
           )}
-          <button type="submit">Submit</button>
+          <button type="submit" className="btn" onClick={submitHandler}>
+            Submit
+          </button>
           <p>
             New customer? <Link to="/auth/signup">Signup</Link>
           </p>
@@ -76,70 +96,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-export const action = async ({ request }) => {
-  const formData = await request.formData();
-
-  const email = formData.get("email");
-  const password = formData.get("password");
-
-  const emailIsValid = validateEmail(email);
-  const passwordIsValid = validatePassword(password);
-
-  let errors = {};
-
-  if (!emailIsValid) {
-    errors.emailErrorMessage = "Enter a valid email.";
-  }
-  if (!passwordIsValid) {
-    errors.passwordErrorMessage = "Password should be at least 5 characters.";
-  }
-
-  if (email.length === 0) {
-    errors.emailErrorMessage = "This field cannot be empty";
-  }
-
-  if (password.length === 0) {
-    errors.passwordErrorMessage = "This field cannot be empty";
-  }
-
-  if (
-    !emailIsValid ||
-    !passwordIsValid ||
-    email.length === 0 ||
-    password.length === 0
-  ) {
-    return errors;
-  }
-
-  const loginData = { email, password };
-
-  const response = await fetch("http://localhost:8080/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(loginData),
-  });
-
-  const resData = await response.json();
-
-  if (response.status === 404) {
-    errors.emailErrorMessage = resData.message;
-  }
-
-  if (response.status === 400) {
-    errors.passwordErrorMessage = resData.message;
-  }
-
-  const userId = `RP${resData.userId}`;
-  const token = resData.token;
-
-  if (!response.ok) {
-    return errors;
-  } else {
-    localStorage.setItem("userId", userId);
-    localStorage.setItem("token", token);
-    return redirect("/");
-  }
-};

@@ -29,3 +29,19 @@ li .price {
   font-weight: bold;
   margin-bottom: 1rem;
 }
+
+#admin-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+
+}
+
+.admin {
+  margin: auto 0;
+}
+
+.admin button {
+  font-size: 0.9rem;
+  margin-left: 4px;
+}

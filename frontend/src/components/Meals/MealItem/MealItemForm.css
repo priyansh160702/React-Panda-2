@@ -3,7 +3,7 @@ form {
   display: grid;
 }
 
-form button {
+/* form button {
   font: inherit;
   cursor: pointer;
   background-color: #8a2b06;
@@ -23,4 +23,4 @@ form button:hover,
 form button:active {
   background-color: #641e03;
   border-color: #641e03;
-}
+} */

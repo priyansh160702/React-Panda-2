@@ -1,4 +1,4 @@
-import { cartStateActions } from "../../store/cart-state";
+import { modalStateActions } from "../../store/cart-state";
 import { useDispatch } from "react-redux";
 import { Fragment } from "react";
 import ReactDOM from "react-dom";
@@ -15,12 +15,12 @@ const ModalOverlay = (props) => {
 const Backdrop = () => {
   const dispatch = useDispatch();
 
-  const cartCloseHandler = () => {
-    dispatch(cartStateActions.hide());
+  const modalCloseHandler = () => {
+    dispatch(modalStateActions.hide());
   };
 
   return (
-    <div id="backdrop" className="backdrop" onClick={cartCloseHandler}></div>
+    <div id="backdrop" className="backdrop" onClick={modalCloseHandler}></div>
   );
 };
 

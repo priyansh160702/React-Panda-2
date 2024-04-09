@@ -5,11 +5,11 @@ import Cart from "../components/Cart/Cart";
 import { useSelector } from "react-redux";
 
 const HomePage = () => {
-  const cartIsShown = useSelector((state) => state.cartState.cartIsShown);
+  const modalIsShown = useSelector((state) => state.modalState.modalIsShown);
 
   return (
     <Fragment>
-      {cartIsShown && <Cart />}
+      {modalIsShown && <Cart />}
       <Meals />
     </Fragment>
   );

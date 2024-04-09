@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { cartStateActions, cartAddActions } from "../../store/cart-state";
+import { modalStateActions, cartAddActions } from "../../store/cart-state";
 import { useDispatch } from "react-redux";
 import classes from "./Checkout.module.css";
 
@@ -75,7 +75,7 @@ const Checkout = (props) => {
   }`;
 
   const closeCartHandler = () => {
-    dispatch(cartStateActions.hide());
+    dispatch(modalStateActions.hide());
   };
 
   return (

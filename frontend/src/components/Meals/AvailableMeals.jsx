@@ -1,44 +1,23 @@
 import { useEffect, useState } from "react";
+
+import { useLoaderData } from "react-router-dom";
+
 import Card from "../../Utility/Card";
 import "./AvailableMeals.css";
 import MealItem from "./MealItem/MealItem";
 
 const AvailableMeals = () => {
-  const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [fetchError, setError] = useState();
 
-  const loadedData = [];
+  const meals = useLoaderData();
+
   useEffect(() => {
-    const fetchMeals = async () => {
-      const response = await fetch(
-        "https://react-panda-3e31b-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json"
-      );
-
-      if (!response.ok) {
-        throw new Error("Something went wrong :(");
-      }
-
-      const responseData = await response.json();
-
-      for (const key in responseData) {
-        loadedData.push({
-          id: key,
-          name: responseData[key].name,
-          description: responseData[key].description,
-          price: responseData[key].price,
-        });
-      }
-
-      setMeals(loadedData);
+    if (meals) {
       setIsLoading(false);
-    };
-
-    fetchMeals().catch((error) => {
-      setIsLoading(false);
-      setError(error.message);
-    });
-  }, []);
+    } else {
+      throw new Error("Something Went wrong!");
+    }
+  });
 
   if (isLoading) {
     return (
@@ -48,10 +27,6 @@ const AvailableMeals = () => {
     );
   }
 
-  if (fetchError) {
-    return <section className="error-msg">{fetchError}</section>;
-  }
-
   const mealItems = meals.map((meal) => (
     <MealItem
       id={meal.id}
@@ -59,6 +34,7 @@ const AvailableMeals = () => {
       name={meal.name}
       desc={meal.description}
       price={meal.price}
+      adminItem={false}
     />
   ));
 

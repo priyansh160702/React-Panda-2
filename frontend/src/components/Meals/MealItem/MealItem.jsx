@@ -25,7 +25,7 @@ const MealItem = (props) => {
   };
 
   return (
-    <div id="item-container">
+    <div id={`${!props.adminItem ? "item-container" : "admin-item"}`}>
       <li>
         <span>
           <h3>{props.name}</h3>
@@ -35,9 +35,17 @@ const MealItem = (props) => {
         </span>
         <span className="price">₹{props.price.toFixed(2)}</span>
       </li>
-      <div>
-        <MealItemForm id={props.id} onAddToCart={addToCartHandler} />
-      </div>
+      {!props.adminItem && (
+        <div>
+          <MealItemForm id={props.id} onAddToCart={addToCartHandler} />
+        </div>
+      )}
+      {props.adminItem && (
+        <div className="admin">
+          <button className="btn">Edit</button>
+          <button className="btn">Delete</button>
+        </div>
+      )}
     </div>
   );
 };

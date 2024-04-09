@@ -21,7 +21,7 @@
   background-color: transparent;
 }
 
-.btn {
+.header-link {
   background-color: transparent;
   border: none;
   color: white;
@@ -30,7 +30,7 @@
   transition: all 200ms ease-in;
 }
 
-.btn:hover {
+.header-link:hover {
   cursor: pointer;
   color: rgba(255, 255, 255, 0.51);
 }

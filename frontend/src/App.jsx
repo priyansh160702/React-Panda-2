@@ -2,8 +2,12 @@ import { Fragment } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "./components/RootLayout";
 import HomePage from "./pages/HomePage";
-import SignupPage, { action as signupAction } from "./pages/SignupPage";
-import LoginPage, { action as loginAction } from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import signUpAction from "./Utility/ActionFunctions/signupAction";
+import LoginPage from "./pages/LoginPage";
+import loginAction from "./Utility/ActionFunctions/loginAction";
+import AdminPage from "./pages/AdminPage";
+import fetchMealsLoader from "./Utility/fetchMealsLoader";
 
 function App() {
   const router = createBrowserRouter([
@@ -11,9 +15,10 @@ function App() {
       path: "/",
       element: <RootLayout />,
       children: [
-        { index: true, element: <HomePage /> },
-        { path: "auth/signup", element: <SignupPage />, action: signupAction },
+        { index: true, element: <HomePage />, loader: fetchMealsLoader },
+        { path: "auth/signup", element: <SignupPage />, action: signUpAction },
         { path: "auth/login", element: <LoginPage />, action: loginAction },
+        { path: "/admin", element: <AdminPage />, loader: fetchMealsLoader },
       ],
     },
   ]);
