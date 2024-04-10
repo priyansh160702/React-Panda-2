@@ -11,6 +11,7 @@ import { modalStateActions } from "../store/cart-state";
 
 const AdminPage = () => {
   const meals = useLoaderData();
+  console.log(meals, "Here");
 
   const modalIsShown = useSelector((state) => state.modalState.modalIsShown);
 
@@ -30,9 +31,9 @@ const AdminPage = () => {
 
   const mealItems = meals.map((meal) => (
     <MealItem
-      id={meal.id}
-      key={meal.id}
-      name={meal.name}
+      id={meal._id}
+      key={meal._id}
+      name={meal.title}
       desc={meal.description}
       price={meal.price}
       adminItem={true}
@@ -53,12 +54,12 @@ const AdminPage = () => {
         <Modal>
           <h2>Add Meal</h2>
           <Form method="post" className="form" onSubmit={formSubmitHandler}>
-            <label htmlFor="name">Name</label>
-            <input type="text" id="name" ref={nameInputRef} />
+            <label htmlFor="title">Title</label>
+            <input type="text" id="title" name="title" ref={nameInputRef} />
             <label htmlFor="desc">Description</label>
-            <textarea type="text" cols={10} id="desc" />
+            <textarea type="text" cols={10} id="desc" name="description" />
             <label htmlFor="price">Price</label>
-            <input type="number" id="price" />
+            <input type="number" id="price" name="price" />
             <button type="submit" className="btn">
               Add item
             </button>

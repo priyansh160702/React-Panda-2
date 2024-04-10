@@ -33,7 +33,7 @@ const MealItem = (props) => {
         <span>
           <p>{props.desc}</p>
         </span>
-        <span className="price">₹{props.price.toFixed(2)}</span>
+        <span className="price">₹{props.price}</span>
       </li>
       {!props.adminItem && (
         <div>

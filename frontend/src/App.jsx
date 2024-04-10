@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import loginAction from "./Utility/ActionFunctions/loginAction";
 import AdminPage from "./pages/AdminPage";
 import fetchMealsLoader from "./Utility/fetchMealsLoader";
+import addMealAction from "./Utility/ActionFunctions/addMealAction";
 
 function App() {
   const router = createBrowserRouter([
@@ -18,7 +19,12 @@ function App() {
         { index: true, element: <HomePage />, loader: fetchMealsLoader },
         { path: "auth/signup", element: <SignupPage />, action: signUpAction },
         { path: "auth/login", element: <LoginPage />, action: loginAction },
-        { path: "/admin", element: <AdminPage />, loader: fetchMealsLoader },
+        {
+          path: "/admin",
+          element: <AdminPage />,
+          loader: fetchMealsLoader,
+          action: addMealAction,
+        },
       ],
     },
   ]);

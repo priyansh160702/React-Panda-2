@@ -29,9 +29,9 @@ const AvailableMeals = () => {
 
   const mealItems = meals.map((meal) => (
     <MealItem
-      id={meal.id}
-      key={meal.id}
-      name={meal.name}
+      id={meal._id}
+      key={meal._id}
+      name={meal.title}
       desc={meal.description}
       price={meal.price}
       adminItem={false}

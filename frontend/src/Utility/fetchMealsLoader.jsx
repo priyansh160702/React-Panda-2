@@ -1,20 +1,17 @@
 const fetchMealsLoader = async () => {
-  const response = await fetch(
-    "https://react-panda-3e31b-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json"
-  );
+  // const response = await fetch(
+  //   "https://react-panda-3e31b-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json"
+  // );
+
+  // const resData = await response1.json();
+
+  const response = await fetch("http://localhost:8080/meals");
 
   const responseData = await response.json();
 
-  const meals = [];
+  const meals = responseData.meals;
 
-  for (const key in responseData) {
-    meals.push({
-      id: key,
-      name: responseData[key].name,
-      description: responseData[key].description,
-      price: responseData[key].price,
-    });
-  }
+  console.log(responseData);
 
   if (response.ok) {
     return meals;
