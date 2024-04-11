@@ -16,6 +16,8 @@ exports.addMeals = async (req, res, next) => {
 
     const meal = new Meal(title, description, price);
 
+    console.log(meal);
+
     await meal.save();
 
     return res.status(201).send({ message: "Meal added successfully!", meal });
@@ -25,4 +27,18 @@ exports.addMeals = async (req, res, next) => {
     }
     next(err);
   }
+};
+
+exports.editMeals = async (req, res, next) => {
+  const mealId = req.params.mealId;
+
+  const updatedTitle = req.body.title;
+  const updatedDescription = req.body.description;
+  const updatedPrice = req.body.price;
+
+  const meal = new Meal(updatedTitle, updatedDescription, updatedPrice, mealId);
+
+  await meal.save();
+
+  return res.status(200).send({ message: "Edited successfully!" });
 };

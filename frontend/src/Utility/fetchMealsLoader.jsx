@@ -11,8 +11,6 @@ const fetchMealsLoader = async () => {
 
   const meals = responseData.meals;
 
-  console.log(responseData);
-
   if (response.ok) {
     return meals;
   } else {

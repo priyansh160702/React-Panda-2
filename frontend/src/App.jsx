@@ -8,7 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import loginAction from "./Utility/ActionFunctions/loginAction";
 import AdminPage from "./pages/AdminPage";
 import fetchMealsLoader from "./Utility/fetchMealsLoader";
-import addMealAction from "./Utility/ActionFunctions/addMealAction";
+import sendMealDataAction from "./Utility/ActionFunctions/sendDataMealAction";
 
 function App() {
   const router = createBrowserRouter([
@@ -23,7 +23,7 @@ function App() {
           path: "/admin",
           element: <AdminPage />,
           loader: fetchMealsLoader,
-          action: addMealAction,
+          action: sendMealDataAction,
         },
       ],
     },

@@ -1,4 +1,4 @@
-import { cartAddActions } from "../../../store/cart-state";
+import { cartAddActions, modalStateActions } from "../../../store/cart-state";
 import { useDispatch } from "react-redux";
 import "./MealItem.css";
 import MealItemForm from "./MealItemForm";
@@ -24,6 +24,17 @@ const MealItem = (props) => {
     );
   };
 
+  const editHandler = () => {
+    dispatch(modalStateActions.show());
+
+    props.onEdit({
+      id: props.id,
+      // name: props.name,
+      // description: props.description,
+      // price: props.price,
+    });
+  };
+
   return (
     <div id={`${!props.adminItem ? "item-container" : "admin-item"}`}>
       <li>
@@ -42,7 +53,9 @@ const MealItem = (props) => {
       )}
       {props.adminItem && (
         <div className="admin">
-          <button className="btn">Edit</button>
+          <button className="btn" onClick={editHandler}>
+            Edit
+          </button>
           <button className="btn">Delete</button>
         </div>
       )}
