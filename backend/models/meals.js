@@ -33,6 +33,13 @@ class Meal {
 
     return meals;
   }
+
+  static deleteById(mealId) {
+    const db = getDb();
+    return db
+      .collection("meals")
+      .deleteOne({ _id: new mongodb.ObjectId(mealId) });
+  }
 }
 
 module.exports = Meal;

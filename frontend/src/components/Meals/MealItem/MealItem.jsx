@@ -1,10 +1,14 @@
+import { useSubmit } from "react-router-dom";
 import { cartAddActions, modalStateActions } from "../../../store/cart-state";
 import { useDispatch } from "react-redux";
+
 import "./MealItem.css";
 import MealItemForm from "./MealItemForm";
 
 const MealItem = (props) => {
   const dispatch = useDispatch();
+
+  const submit = useSubmit();
 
   const addToCartHandler = (quantity) => {
     dispatch(
@@ -24,15 +28,19 @@ const MealItem = (props) => {
     );
   };
 
-  const editHandler = () => {
+  const editMealHandler = () => {
     dispatch(modalStateActions.show());
 
     props.onEdit({
       id: props.id,
-      // name: props.name,
-      // description: props.description,
-      // price: props.price,
     });
+  };
+
+  const deleteMealHandler = () => {
+    const proceed = window.confirm(`Sure you want to delete ${props.name}?`);
+    if (proceed) {
+      submit({ mealId: props.id }, { method: "DELETE", action: "/admin" });
+    }
   };
 
   return (
@@ -53,10 +61,12 @@ const MealItem = (props) => {
       )}
       {props.adminItem && (
         <div className="admin">
-          <button className="btn" onClick={editHandler}>
+          <button className="btn" onClick={editMealHandler}>
             Edit
           </button>
-          <button className="btn">Delete</button>
+          <button className="btn" onClick={deleteMealHandler}>
+            Delete
+          </button>
         </div>
       )}
     </div>

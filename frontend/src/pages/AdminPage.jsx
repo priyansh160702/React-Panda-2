@@ -100,9 +100,14 @@ const AdminPage = () => {
               defaultValue={editMode ? mealItem.price : ""}
             />
             <input type="hidden" name="mealId" value={mealId} />
-            <button type="submit" className="btn">
-              {`${!editMode ? "Add" : "Edit"} Meal`}
-            </button>
+            <div className="btn-container">
+              <button type="submit" className="btn">
+                {`${!editMode ? "Add" : "Edit"} Meal`}
+              </button>
+              <button type="button" className="btn" onClick={formSubmitHandler}>
+                Cancel
+              </button>
+            </div>
           </Form>
         </Modal>
       )}

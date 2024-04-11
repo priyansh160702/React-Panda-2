@@ -10,4 +10,6 @@ router.post("/meals", mealsController.addMeals);
 
 router.patch("/meals/:mealId", mealsController.editMeals);
 
+router.delete("/meals/:mealId", mealsController.deleteMeals);
+
 module.exports = router;

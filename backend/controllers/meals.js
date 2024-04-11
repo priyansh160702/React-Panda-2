@@ -42,3 +42,11 @@ exports.editMeals = async (req, res, next) => {
 
   return res.status(200).send({ message: "Edited successfully!" });
 };
+
+exports.deleteMeals = async (req, res, next) => {
+  const mealId = req.params.mealId;
+
+  await Meal.deleteById(mealId);
+
+  return res.status(200).send({ message: "Deleted successfully!" });
+};
