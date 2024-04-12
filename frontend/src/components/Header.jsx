@@ -1,12 +1,13 @@
 import { useEffect } from "react";
-import CartButton from "./Cart/CartButton";
 import { Link, useLocation } from "react-router-dom";
+
+import CartButton from "./Cart/CartButton";
 import useAuth from "../Utility/use-auth";
 import image from "../img/meals.jpg";
 import "./Header.css";
 
 const Header = () => {
-  const { logoutHandler, isLoggedIn } = useAuth();
+  const { logoutHandler, isLoggedIn, isAdmin } = useAuth();
 
   const location = useLocation();
 
@@ -42,13 +43,15 @@ const Header = () => {
           >
             React Panda
           </Link>
-          <Link
-            to="/admin"
-            className="header-link"
-            style={isAdminPage ? { display: "none" } : null}
-          >
-            Admin
-          </Link>
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className="header-link"
+              style={isAdminPage ? { display: "none" } : null}
+            >
+              Admin
+            </Link>
+          )}
 
           <div>
             {isLoggedIn && !isAdminPage && <CartButton />}

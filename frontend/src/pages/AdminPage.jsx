@@ -13,9 +13,10 @@ const AdminPage = () => {
   const [editMode, setEditMode] = useState(false);
   const [mealId, setMealId] = useState("");
 
-  const meals = useLoaderData();
-
   const modalIsShown = useSelector((state) => state.modalState.modalIsShown);
+  const isAdmin = useSelector((state) => state.adminState.isAdmin);
+
+  const meals = useLoaderData();
 
   const dispatch = useDispatch();
 
@@ -62,7 +63,7 @@ const AdminPage = () => {
     setEditMode(false);
   };
 
-  const formSubmitHandler = (e) => {
+  const hideModalHandler = (e) => {
     dispatch(modalStateActions.hide());
   };
 
@@ -74,7 +75,7 @@ const AdminPage = () => {
           <Form
             method={`${!editMode ? "post" : "patch"}`}
             className="form"
-            onSubmit={formSubmitHandler}
+            onSubmit={hideModalHandler}
           >
             <label htmlFor="title">Title</label>
             <input
@@ -100,11 +101,12 @@ const AdminPage = () => {
               defaultValue={editMode ? mealItem.price : ""}
             />
             <input type="hidden" name="mealId" value={mealId} />
+            <input type="hidden" name="isAdmin" value={isAdmin} />
             <div className="btn-container">
               <button type="submit" className="btn">
                 {`${!editMode ? "Add" : "Edit"} Meal`}
               </button>
-              <button type="button" className="btn" onClick={formSubmitHandler}>
+              <button type="button" className="btn" onClick={hideModalHandler}>
                 Cancel
               </button>
             </div>

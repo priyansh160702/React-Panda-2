@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import RootLayout from "./components/RootLayout";
 import HomePage from "./pages/HomePage";
 import SignupPage from "./pages/SignupPage";
@@ -7,10 +8,15 @@ import signUpAction from "./Utility/ActionFunctions/signupAction";
 import LoginPage from "./pages/LoginPage";
 import loginAction from "./Utility/ActionFunctions/loginAction";
 import AdminPage from "./pages/AdminPage";
-import fetchMealsLoader from "./Utility/fetchMealsLoader";
+import fetchMealsLoader from "./Utility/LoaderFunctions/fetchMealsLoader";
+import adminMealsLoader from "./Utility/LoaderFunctions/adminMealsLoader";
 import sendMealDataAction from "./Utility/ActionFunctions/sendDataMealAction";
+import useAuth from "./Utility/use-auth";
+import NotAdminError from "./Utility/NotAdminError";
 
 function App() {
+  const { isAdmin } = useAuth();
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -20,9 +26,9 @@ function App() {
         { path: "auth/signup", element: <SignupPage />, action: signUpAction },
         { path: "auth/login", element: <LoginPage />, action: loginAction },
         {
-          path: "/admin",
-          element: <AdminPage />,
-          loader: fetchMealsLoader,
+          path: "admin",
+          element: isAdmin ? <AdminPage /> : <NotAdminError />,
+          loader: adminMealsLoader,
           action: sendMealDataAction,
         },
       ],

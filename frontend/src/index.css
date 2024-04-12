@@ -118,3 +118,23 @@ a {
 .form .invalid {
   border: red solid;
 }
+
+.not-admin {
+  position: absolute;
+  left: 30%;
+  top: 40%;
+}
+
+.not-admin h1 {
+  font-size: 5rem;
+  color: rgba(197, 2, 2, 0.863);
+
+}
+
+.not-admin p {
+  margin-left: 3rem;
+}
+
+.not-admin span {
+  color: red;
+}

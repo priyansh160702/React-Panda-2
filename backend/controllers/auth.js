@@ -70,11 +70,14 @@ exports.login = async (req, res, next) => {
       throw err;
     }
 
+    const isAdmin = user.isAdmin;
+
     // Creating the JWT
     const token = jwt.sign(
       {
         email: user.email,
         userId: user._id.toString(),
+        isAdmin,
       },
       "somesupersecretlongstring",
       { expiresIn: "1h" }

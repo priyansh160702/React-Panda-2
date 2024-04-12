@@ -16,8 +16,6 @@ exports.addMeals = async (req, res, next) => {
 
     const meal = new Meal(title, description, price);
 
-    console.log(meal);
-
     await meal.save();
 
     return res.status(201).send({ message: "Meal added successfully!", meal });

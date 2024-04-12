@@ -12,27 +12,22 @@ const sendMealDataAction = async ({ request }) => {
   const mealId = data.get("mealId");
   console.log(method);
 
-  let response;
+  const url = `http://localhost:8080/meals${
+    method !== "POST" ? `/${mealId}` : "/"
+  }`;
+
+  const options = {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 
   if (method === "POST" || method === "PATCH") {
-    response = await fetch(
-      `http://localhost:8080/meals${method === "PATCH" ? `/${mealId}` : "/"}`,
-      {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mealData),
-      }
-    );
-  } else {
-    response = await fetch(`http://localhost:8080/meals/${mealId}`, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    options.body = JSON.stringify(mealData);
   }
+
+  const response = await fetch(url, options);
 
   return null;
 };
