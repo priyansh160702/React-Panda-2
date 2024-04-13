@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import CartButton from "./Cart/CartButton";
 import useAuth from "../Utility/use-auth";
@@ -8,6 +8,8 @@ import "./Header.css";
 
 const Header = () => {
   const { logoutHandler, isLoggedIn, isAdmin } = useAuth();
+
+  const navigate = useNavigate();
 
   const location = useLocation();
 
@@ -31,6 +33,11 @@ const Header = () => {
   }, [location.pathname]);
 
   const isAdminPage = location.pathname === "/admin";
+
+  const logoutBtnHandler = () => {
+    logoutHandler();
+    navigate("/");
+  };
 
   return (
     <header>
@@ -59,7 +66,7 @@ const Header = () => {
               <button
                 type="button"
                 className="header-link"
-                onClick={logoutHandler}
+                onClick={logoutBtnHandler}
               >
                 Logout
               </button>

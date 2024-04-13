@@ -57,7 +57,7 @@ const loginAction = async ({ request }) => {
     errors.passwordErrorMessage = resData.message;
   }
 
-  const userId = `RP${resData.userId}`;
+  const userId = `RP-${resData.userId}`;
   const token = resData.token;
 
   if (!response.ok) {

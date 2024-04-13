@@ -14,17 +14,19 @@ const useAuth = () => {
   }, [token]);
 
   useEffect(() => {
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      console.log(decodedToken.isAdmin);
-      if (decodedToken.exp * 1000 > Date.now()) {
-        setIsAdmin(decodedToken.isAdmin);
+    const fetchToken = () => {
+      if (token) {
+        const decodedToken = jwtDecode(token);
+
+        if (decodedToken.exp * 1000 > Date.now()) {
+          setIsAdmin(decodedToken.isAdmin);
+        }
       } else {
         setIsAdmin(false);
       }
-    } else {
-      setIsAdmin(false);
-    }
+    };
+
+    fetchToken();
   }, [token]);
 
   const logoutHandler = () => {

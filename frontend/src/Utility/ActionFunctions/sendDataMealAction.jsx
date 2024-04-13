@@ -1,4 +1,6 @@
 const sendMealDataAction = async ({ request }) => {
+  const token = localStorage.getItem("token");
+
   const method = request.method;
 
   const data = await request.formData();
@@ -20,6 +22,7 @@ const sendMealDataAction = async ({ request }) => {
     method,
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   };
 
