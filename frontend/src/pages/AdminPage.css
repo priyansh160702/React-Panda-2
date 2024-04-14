@@ -11,6 +11,10 @@
     margin-right: 5px;
 }
 
+#desc-error-message {
+    margin-top: 2px;
+}
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;

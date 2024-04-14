@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import RootLayout from "./components/RootLayout";
@@ -11,12 +11,8 @@ import AdminPage from "./pages/AdminPage";
 import fetchMealsLoader from "./Utility/LoaderFunctions/fetchMealsLoader";
 import adminMealsLoader from "./Utility/LoaderFunctions/adminMealsLoader";
 import sendMealDataAction from "./Utility/ActionFunctions/sendDataMealAction";
-import useAuth from "./Utility/use-auth";
-import NotAdminError from "./Utility/NotAdminError";
 
 function App() {
-  const { isAdmin } = useAuth();
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -27,7 +23,7 @@ function App() {
         { path: "auth/login", element: <LoginPage />, action: loginAction },
         {
           path: "admin",
-          element: isAdmin ? <AdminPage /> : <NotAdminError />,
+          element: <AdminPage />,
           loader: adminMealsLoader,
           action: sendMealDataAction,
         },

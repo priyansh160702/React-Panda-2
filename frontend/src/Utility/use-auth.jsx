@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 const useAuth = () => {
   const token = localStorage.getItem("token");
 
-  const [isLoggedIn, setIsLoggedIn] = useState(token);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {

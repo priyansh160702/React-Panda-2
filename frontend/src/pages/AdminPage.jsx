@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLoaderData, Form } from "react-router-dom";
+import { useLoaderData, Form, useActionData } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import MealItem from "../components/Meals/MealItem/MealItem";
@@ -13,14 +13,35 @@ const AdminPage = () => {
   const [editMode, setEditMode] = useState(false);
   const [mealId, setMealId] = useState("");
 
+  const [titleErrorMessage, setTitleErrorMessage] = useState(null);
+  const [descriptionErrorMessage, setDescriptionErrorMessage] = useState(null);
+  const [priceErrorMessage, setPriceErrorMessage] = useState(null);
+
   const modalIsShown = useSelector((state) => state.modalState.modalIsShown);
   const isAdmin = useSelector((state) => state.adminState.isAdmin);
 
   const meals = useLoaderData();
 
+  const formData = useActionData();
+  console.log(formData);
+
   const dispatch = useDispatch();
 
   const nameInputRef = useRef();
+
+  useEffect(() => {
+    if (formData) {
+      if (formData.titleErrorMessage) {
+        setTitleErrorMessage(formData.titleErrorMessage);
+      }
+      if (formData.descriptionErrorMessage) {
+        setDescriptionErrorMessage(formData.descriptionErrorMessage);
+      }
+      if (formData.priceErrorMessage) {
+        setPriceErrorMessage(formData.priceErrorMessage);
+      }
+    }
+  }, [formData]);
 
   useEffect(() => {
     if (modalIsShown) {
@@ -37,14 +58,7 @@ const AdminPage = () => {
     setMealId(editData.id);
   };
 
-  const mealItem = {};
-  for (let key in meals) {
-    if (meals[key]._id === mealId) {
-      mealItem.title = meals[key].title;
-      mealItem.description = meals[key].description;
-      mealItem.price = meals[key].price;
-    }
-  }
+  const mealItem = meals.find((meal) => meal._id === mealId);
 
   const mealItems = meals.map((meal) => (
     <MealItem
@@ -63,8 +77,30 @@ const AdminPage = () => {
     setEditMode(false);
   };
 
+  const formSubmitHandler = () => {
+    if (formData) {
+      dispatch(modalStateActions.hide());
+    }
+
+    setTitleErrorMessage(null);
+
+    setDescriptionErrorMessage(null);
+
+    setPriceErrorMessage(null);
+  };
+
   const hideModalHandler = (e) => {
     dispatch(modalStateActions.hide());
+  };
+
+  const titleErrorHandler = () => {
+    setTitleErrorMessage(null);
+  };
+  const descriptionErrorHandler = () => {
+    setDescriptionErrorMessage(null);
+  };
+  const priceErrorHandler = () => {
+    setPriceErrorMessage(null);
   };
 
   return (
@@ -75,7 +111,7 @@ const AdminPage = () => {
           <Form
             method={`${!editMode ? "post" : "patch"}`}
             className="form"
-            onSubmit={hideModalHandler}
+            onSubmit={formSubmitHandler}
           >
             <label htmlFor="title">Title</label>
             <input
@@ -84,7 +120,11 @@ const AdminPage = () => {
               name="title"
               defaultValue={editMode ? mealItem.title : ""}
               ref={nameInputRef}
+              onChange={titleErrorHandler}
             />
+            {titleErrorMessage && (
+              <p className="error-message">{titleErrorMessage}</p>
+            )}
             <label htmlFor="desc">Description</label>
             <textarea
               type="text"
@@ -92,14 +132,24 @@ const AdminPage = () => {
               id="desc"
               name="description"
               defaultValue={editMode ? mealItem.description : ""}
+              onChange={descriptionErrorHandler}
             />
+            {descriptionErrorMessage && (
+              <p className="error-message" id="desc-error-message">
+                {descriptionErrorMessage}
+              </p>
+            )}
             <label htmlFor="price">Price</label>
             <input
               type="number"
               id="price"
               name="price"
               defaultValue={editMode ? mealItem.price : ""}
+              onChange={priceErrorHandler}
             />
+            {priceErrorMessage && (
+              <p className="error-message">{priceErrorMessage}</p>
+            )}
             <input type="hidden" name="mealId" value={mealId} />
             <input type="hidden" name="isAdmin" value={isAdmin} />
             <div className="btn-container">

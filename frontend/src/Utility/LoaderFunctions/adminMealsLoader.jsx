@@ -1,9 +1,23 @@
 import { redirect } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const adminMealsLoader = async ({ request }) => {
   const token = localStorage.getItem("token");
 
   if (!token) {
+    return redirect("/auth/login");
+  }
+
+  const decodedToken = jwtDecode(token);
+  let isAdmin = false;
+
+  if (decodedToken.exp * 1000 > Date.now()) {
+    isAdmin = decodedToken.isAdmin;
+  }
+
+  console.log(isAdmin);
+
+  if (!isAdmin) {
     return redirect("/auth/login");
   }
 

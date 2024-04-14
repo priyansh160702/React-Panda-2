@@ -10,6 +10,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
   background: #3f3f3f;
   overflow-y: scroll;
   margin-bottom: 1.4rem;
