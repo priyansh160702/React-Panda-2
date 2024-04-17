@@ -15,8 +15,6 @@ const adminMealsLoader = async ({ request }) => {
     isAdmin = decodedToken.isAdmin;
   }
 
-  console.log(isAdmin);
-
   if (!isAdmin) {
     return redirect("/auth/login");
   }

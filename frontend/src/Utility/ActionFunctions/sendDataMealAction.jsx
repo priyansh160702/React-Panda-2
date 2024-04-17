@@ -13,25 +13,14 @@ const sendMealDataAction = async ({ request }) => {
 
   const mealId = data.get("mealId");
 
-  console.log(method);
-
   const errors = {};
   if (method === "POST" || method === "PATCH") {
-    const errorMessage = "This field cannot be empty";
-
-    if (mealData.title.length === 0) {
-      errors.titleErrorMessage = errorMessage;
-    }
-    if (mealData.description.length === 0) {
-      errors.descriptionErrorMessage = errorMessage;
-    }
-    // if (!mealData.price) {
-    //   errors.priceErrorMessage = errorMessage;
-    // }
-
-    if (Object.keys(errors).length !== 0) {
-      console.log(errors);
-      return errors;
+    if (
+      mealData.title.trim().length === 0 ||
+      mealData.description.trim().length === 0 ||
+      mealData.price.trim().length === 0
+    ) {
+      return null;
     }
   }
 
@@ -56,9 +45,9 @@ const sendMealDataAction = async ({ request }) => {
   const resData = await response.json();
 
   if (method === "POST" || method === "PATCH") {
-    if (response.status === 403) {
-      errors.titleErrorMessage = resData.message;
-    }
+    // if (response.status === 403) {
+    //   errors.titleErrorMessage = resData.message;
+    // }
 
     if (response.status === 422) {
       resData.errors.errors.forEach((item) => {
@@ -73,6 +62,7 @@ const sendMealDataAction = async ({ request }) => {
         }
       });
     }
+
     if (!response.ok) {
       return errors;
     }

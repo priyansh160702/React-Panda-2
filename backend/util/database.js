@@ -1,4 +1,5 @@
 const mongodb = require("mongodb");
+
 const MongoClient = mongodb.MongoClient;
 
 let _db;
@@ -6,7 +7,8 @@ let _db;
 const mongoConnect = async (cb) => {
   try {
     const client = await MongoClient.connect(
-      "mongodb+srv://Priyansh16:MongoPass123@cluster0.s3m1ro1.mongodb.net/react-panda?retryWrites=true&w=majority&appName=Cluster0"
+      `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.s3m1ro1.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority&appName=Cluster0`
+      // "mongodb+srv://Priyansh16:MongoPass123@cluster0.s3m1ro1.mongodb.net/react-panda?retryWrites=true&w=majority&appName=Cluster0"
     );
 
     console.log("Connected!");

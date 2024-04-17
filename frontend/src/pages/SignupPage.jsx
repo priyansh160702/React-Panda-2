@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, Form, useActionData } from "react-router-dom";
+import { Link, Form, useActionData, useNavigation } from "react-router-dom";
 
 import Card from "../Utility/Card";
 
@@ -8,6 +8,9 @@ const SignupPage = () => {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState(null);
   const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] =
     useState(null);
+
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
 
   const emailInputRef = useRef();
 
@@ -93,8 +96,8 @@ const SignupPage = () => {
           {confirmPasswordErrorMessage && (
             <p className="error-message">{confirmPasswordErrorMessage}</p>
           )}
-          <button type="submit" className="btn">
-            Submit
+          <button type="submit" className="btn" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Submit"}
           </button>
           <p>
             Already signed up? <Link to="/auth/login">Login</Link>

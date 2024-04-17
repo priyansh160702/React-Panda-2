@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { useLoaderData, Form, useActionData } from "react-router-dom";
+import {
+  useLoaderData,
+  Form,
+  useActionData,
+  useNavigation,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import MealItem from "../components/Meals/MealItem/MealItem";
@@ -10,6 +15,11 @@ import Modal from "../Utility/Modal/Modal";
 import { modalStateActions } from "../store/cart-state";
 
 const AdminPage = () => {
+  const dispatch = useDispatch();
+
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
   const [editMode, setEditMode] = useState(false);
   const [mealId, setMealId] = useState("");
 
@@ -18,30 +28,18 @@ const AdminPage = () => {
   const [priceErrorMessage, setPriceErrorMessage] = useState(null);
 
   const modalIsShown = useSelector((state) => state.modalState.modalIsShown);
-  const isAdmin = useSelector((state) => state.adminState.isAdmin);
+
+  const errors = useActionData();
 
   const meals = useLoaderData();
 
-  const formData = useActionData();
-  console.log(formData);
-
-  const dispatch = useDispatch();
+  if (!meals) {
+    throw new Error("Failed to fetch meals.");
+  }
 
   const nameInputRef = useRef();
-
-  useEffect(() => {
-    if (formData) {
-      if (formData.titleErrorMessage) {
-        setTitleErrorMessage(formData.titleErrorMessage);
-      }
-      if (formData.descriptionErrorMessage) {
-        setDescriptionErrorMessage(formData.descriptionErrorMessage);
-      }
-      if (formData.priceErrorMessage) {
-        setPriceErrorMessage(formData.priceErrorMessage);
-      }
-    }
-  }, [formData]);
+  const descriptionInputRef = useRef();
+  const priceInputRef = useRef();
 
   useEffect(() => {
     if (modalIsShown) {
@@ -49,13 +47,40 @@ const AdminPage = () => {
     }
   }, [modalIsShown]);
 
-  if (!meals) {
-    throw new Error("Failed to fetch meals.");
-  }
+  useEffect(() => {
+    if (errors) {
+      if (errors.titleErrorMessage) {
+        setTitleErrorMessage(errors.titleErrorMessage);
+      }
+      if (errors.descriptionErrorMessage) {
+        setDescriptionErrorMessage(errors.descriptionErrorMessage);
+      }
+      if (errors.priceErrorMessage) {
+        setPriceErrorMessage(errors.priceErrorMessage);
+      }
+    }
+  }, [errors]);
+
+  const addMealItemHandler = () => {
+    dispatch(modalStateActions.show());
+
+    setTitleErrorMessage(null);
+
+    setDescriptionErrorMessage(null);
+
+    setPriceErrorMessage(null);
+    setEditMode(false);
+  };
 
   const editHandler = (editData) => {
     setEditMode(true);
     setMealId(editData.id);
+
+    setTitleErrorMessage(null);
+
+    setDescriptionErrorMessage(null);
+
+    setPriceErrorMessage(null);
   };
 
   const mealItem = meals.find((meal) => meal._id === mealId);
@@ -72,27 +97,12 @@ const AdminPage = () => {
     />
   ));
 
-  const addMealItemHandler = () => {
-    dispatch(modalStateActions.show());
-    setEditMode(false);
-  };
-
-  const formSubmitHandler = () => {
-    if (formData) {
-      dispatch(modalStateActions.hide());
-    }
-
-    setTitleErrorMessage(null);
-
-    setDescriptionErrorMessage(null);
-
-    setPriceErrorMessage(null);
-  };
-
-  const hideModalHandler = (e) => {
+  // Cancel Button
+  const cancelButtonHandler = (e) => {
     dispatch(modalStateActions.hide());
   };
 
+  // onChange
   const titleErrorHandler = () => {
     setTitleErrorMessage(null);
   };
@@ -101,6 +111,36 @@ const AdminPage = () => {
   };
   const priceErrorHandler = () => {
     setPriceErrorMessage(null);
+  };
+
+  // Submit Handler
+  const formSubmitHandler = () => {
+    const errorMessage = "This field cannot be empty";
+
+    const titleInputValue = nameInputRef.current.value;
+    const descriptionInputValue = descriptionInputRef.current.value;
+    const priceInputValue = priceInputRef.current.value;
+
+    if (titleInputValue.trim().length === 0) {
+      setTitleErrorMessage(errorMessage);
+    }
+    if (descriptionInputValue.trim().length === 0) {
+      setDescriptionErrorMessage(errorMessage);
+    }
+    if (priceInputValue.trim().length === 0) {
+      setPriceErrorMessage(errorMessage);
+    }
+
+    const hasError =
+      titleInputValue.trim().length === 0 ||
+      descriptionInputValue.trim().length === 0 ||
+      priceInputValue.trim().length === 0;
+
+    if (hasError || errors) {
+      return;
+    } else {
+      dispatch(modalStateActions.hide());
+    }
   };
 
   return (
@@ -133,6 +173,7 @@ const AdminPage = () => {
               name="description"
               defaultValue={editMode ? mealItem.description : ""}
               onChange={descriptionErrorHandler}
+              ref={descriptionInputRef}
             />
             {descriptionErrorMessage && (
               <p className="error-message" id="desc-error-message">
@@ -146,17 +187,30 @@ const AdminPage = () => {
               name="price"
               defaultValue={editMode ? mealItem.price : ""}
               onChange={priceErrorHandler}
+              ref={priceInputRef}
             />
             {priceErrorMessage && (
               <p className="error-message">{priceErrorMessage}</p>
             )}
             <input type="hidden" name="mealId" value={mealId} />
-            <input type="hidden" name="isAdmin" value={isAdmin} />
+
             <div className="btn-container">
-              <button type="submit" className="btn">
-                {`${!editMode ? "Add" : "Edit"} Meal`}
+              <button type="submit" className="btn" disabled={isSubmitting}>
+                {`${
+                  !editMode
+                    ? isSubmitting
+                      ? "Adding..."
+                      : "Add"
+                    : isSubmitting
+                    ? "Editing..."
+                    : "Edit"
+                } Meal`}
               </button>
-              <button type="button" className="btn" onClick={hideModalHandler}>
+              <button
+                type="button"
+                className="btn"
+                onClick={cancelButtonHandler}
+              >
                 Cancel
               </button>
             </div>

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import { Form, Link, useActionData } from "react-router-dom";
+import { Form, Link, useActionData, useNavigation } from "react-router-dom";
 
 import Card from "../Utility/Card";
 import useAuth from "../Utility/use-auth";
@@ -13,6 +13,9 @@ const LoginPage = () => {
   const emailInputRef = useRef();
 
   const formData = useActionData();
+
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
 
   useEffect(() => {
     emailInputRef.current.focus();
@@ -82,8 +85,13 @@ const LoginPage = () => {
           {passwordErrorMessage && (
             <p className="error-message">{passwordErrorMessage}</p>
           )}
-          <button type="submit" className="btn" onClick={submitHandler}>
-            Submit
+          <button
+            type="submit"
+            className="btn"
+            disabled={isSubmitting}
+            onClick={submitHandler}
+          >
+            {isSubmitting ? "Submitting..." : "Submit"}
           </button>
           <p>
             New customer? <Link to="/auth/signup">Signup</Link>

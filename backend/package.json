@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node --env-file=enVariables.env app.js",
+    "nodemon-start": "nodemon --env-file=enVariables.env app.js"
   },
   "keywords": [],
   "author": "",

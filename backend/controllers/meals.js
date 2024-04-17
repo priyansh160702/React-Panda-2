@@ -19,19 +19,23 @@ exports.addMeals = async (req, res, next) => {
     const description = req.body.description;
     const price = req.body.price;
 
+    console.log(title);
+
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       return res.status(422).json({ message: "Validation error", errors });
     }
 
-    const existingMeal = await db.collection("meals").findOne({ title });
+    // const existingMeal = await db
+    //   .collection("meals")
+    //   .findOne({ title });
 
-    if (existingMeal) {
-      const err = new Error("Meal name already exists!");
-      err.statusCode = 403;
-      throw err;
-    }
+    // if (existingMeal) {
+    //   const err = new Error("Meal name already exists!");
+    //   err.statusCode = 403;
+    //   throw err;
+    // }
 
     const meal = new Meal(title, description, price);
 
@@ -63,13 +67,15 @@ exports.editMeals = async (req, res, next) => {
       return res.status(422).json({ message: "Validation error", errors });
     }
 
-    const existingMeal = await db.collection("meals").findOne({ updatedTitle });
+    // const existingMeal = await db
+    //   .collection("meals")
+    //   .findOne({ title: updatedTitle });
 
-    if (existingMeal) {
-      const err = new Error("Meal name already exists!");
-      err.statusCode = 403;
-      throw err;
-    }
+    // if (existingMeal) {
+    //   const err = new Error("Meal name already exists!");
+    //   err.statusCode = 403;
+    //   throw err;
+    // }
 
     const meal = new Meal(
       updatedTitle,
