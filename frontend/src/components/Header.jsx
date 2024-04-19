@@ -5,7 +5,6 @@ import CartButton from "./Cart/CartButton";
 import useAuth from "../Utility/use-auth";
 import image from "../img/meals.jpg";
 import "./Header.css";
-import OrdersPage from "../pages/OrdersPage";
 
 const Header = () => {
   const { logoutHandler, isLoggedIn, isAdmin } = useAuth();
@@ -22,7 +21,10 @@ const Header = () => {
       case "/about":
         document.title = "About";
         break;
-      case "/login":
+      case "/auth/signup":
+        document.title = "Signup";
+        break;
+      case "/auth/login":
         document.title = "Login";
         break;
       case "/admin":

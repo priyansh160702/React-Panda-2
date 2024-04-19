@@ -1,12 +1,15 @@
 import { useRef, useEffect, useState } from "react";
-import { Form, Link, useActionData, useNavigation } from "react-router-dom";
+import {
+  Form,
+  Link,
+  useActionData,
+  useNavigation,
+  useNavigate,
+} from "react-router-dom";
 
 import Card from "../Utility/Card";
-import useAuth from "../Utility/use-auth";
 
 const LoginPage = () => {
-  const { logoutHandler } = useAuth();
-
   const [emailErrorMessage, setEmailErrorMessage] = useState(null);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState(null);
 
@@ -16,6 +19,8 @@ const LoginPage = () => {
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     emailInputRef.current.focus();
@@ -37,21 +42,6 @@ const LoginPage = () => {
   };
   const passwordChangeHandler = () => {
     setPasswordErrorMessage(null);
-  };
-
-  const submitHandler = () => {
-    const remainingMilliseconds = 60 * 60 * 1000;
-
-    setTimeout(() => {
-      logoutHandler();
-    }, remainingMilliseconds);
-  };
-
-  const keyDownHandler = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      submitHandler();
-    }
   };
 
   return (
@@ -78,19 +68,13 @@ const LoginPage = () => {
             id="password"
             name="password"
             onChange={passwordChangeHandler}
-            onKeyDown={keyDownHandler}
             style={passwordErrorMessage ? { border: "1px red solid" } : {}}
             required
           />
           {passwordErrorMessage && (
             <p className="error-message">{passwordErrorMessage}</p>
           )}
-          <button
-            type="submit"
-            className="btn"
-            disabled={isSubmitting}
-            onClick={submitHandler}
-          >
+          <button type="submit" className="btn" disabled={isSubmitting}>
             {isSubmitting ? "Submitting..." : "Submit"}
           </button>
           <p>

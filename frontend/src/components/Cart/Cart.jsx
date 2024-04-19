@@ -64,6 +64,7 @@ const Cart = () => {
       body: JSON.stringify({
         addressData,
         order,
+        totalAmount,
       }),
     });
 

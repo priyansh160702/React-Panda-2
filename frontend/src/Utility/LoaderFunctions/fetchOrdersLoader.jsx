@@ -17,10 +17,12 @@ const fetchOrdersLoader = async () => {
     order.orderedAt = FormatTimestamp(order.orderedAt);
   });
 
+  console.log(orderData);
+
   if (response.ok) {
     return orderData;
   } else {
-    throw new Error("No orders found :(");
+    return null;
   }
 };
 

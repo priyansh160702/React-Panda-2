@@ -2,13 +2,16 @@ import { useSubmit } from "react-router-dom";
 import { cartAddActions, modalStateActions } from "../../../store/cart-state";
 import { useDispatch } from "react-redux";
 
-import "./MealItem.css";
 import MealItemForm from "./MealItemForm";
+import useAuth from "../../../Utility/use-auth";
+import "./MealItem.css";
 
 const MealItem = (props) => {
   const dispatch = useDispatch();
 
   const submit = useSubmit();
+
+  const { isLoggedIn } = useAuth();
 
   const addToCartHandler = (quantity) => {
     dispatch(
@@ -19,13 +22,6 @@ const MealItem = (props) => {
         price: props.price,
       })
     );
-
-    // dispatch(
-    //   cartAddActions.updateTotalAmount({
-    //     price: props.price,
-    //     quantity: quantity,
-    //   })
-    // );
   };
 
   const editMealHandler = () => {
@@ -56,7 +52,9 @@ const MealItem = (props) => {
       </li>
       {!props.adminItem && (
         <div>
-          <MealItemForm id={props.id} onAddToCart={addToCartHandler} />
+          {isLoggedIn && (
+            <MealItemForm id={props.id} onAddToCart={addToCartHandler} />
+          )}
         </div>
       )}
       {props.adminItem && (

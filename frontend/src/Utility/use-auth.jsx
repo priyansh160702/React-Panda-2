@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 const useAuth = () => {
@@ -7,22 +8,25 @@ const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  }, [token]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchToken = () => {
       if (token) {
         const decodedToken = jwtDecode(token);
+        const expirationTime = decodedToken.exp * 1000;
 
-        if (decodedToken.exp * 1000 > Date.now()) {
+        if (expirationTime > Date.now()) {
           setIsAdmin(decodedToken.isAdmin);
+          setIsLoggedIn(true);
+
+          const timeUntilExpiration = expirationTime - Date.now();
+          setTimeout(() => {
+            logoutHandler();
+            navigate("/auth/login");
+            console.log("Session timed out");
+          }, timeUntilExpiration);
         }
-      } else {
-        setIsAdmin(false);
       }
     };
 

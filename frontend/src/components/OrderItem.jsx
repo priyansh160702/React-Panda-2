@@ -1,4 +1,4 @@
-const OrderItem = ({ id, meals, orderedAt }) => {
+const OrderItem = ({ id, meals, orderedAt, totalAmount }) => {
   const mealItem = meals.map((meal, index) => {
     return (
       <li key={index}>
@@ -11,6 +11,7 @@ const OrderItem = ({ id, meals, orderedAt }) => {
     <li>
       <h2>{`=> Order-#${id}  (${orderedAt})`}</h2>
       <ul>{mealItem}</ul>
+      <h2>{`Total - ${totalAmount}`}</h2>
     </li>
   );
 };

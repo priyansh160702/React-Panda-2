@@ -5,6 +5,7 @@ import "./OrdersPage.css";
 
 const OrdersPage = () => {
   const orderData = useLoaderData();
+  console.log(orderData);
 
   const orderItem = orderData.map((order, index) => {
     return (
@@ -13,6 +14,7 @@ const OrdersPage = () => {
         id={order.id}
         meals={order.meals}
         orderedAt={order.orderedAt}
+        totalAmount={order.totalAmount}
       />
     );
   });
@@ -20,7 +22,8 @@ const OrdersPage = () => {
   return (
     <div className="orders">
       <h1>Order History</h1>
-      <ul>{orderItem}</ul>
+
+      {orderData.length > 0 ? <ul>{orderItem}</ul> : <h1>No Orders Yet!</h1>}
     </div>
   );
 };
