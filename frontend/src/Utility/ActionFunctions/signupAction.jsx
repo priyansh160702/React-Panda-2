@@ -9,10 +9,12 @@ import {
 const signUpAction = async ({ request }) => {
   const formData = await request.formData();
 
+  const name = formData.get("name");
   const email = formData.get("email");
   const password = formData.get("password");
   const confirmPassword = formData.get("confirmPassword");
 
+  const nameIsValid = name.length !== 0;
   const emailIsValid = validateEmail(email);
   const passwordIsValid = validatePassword(password);
   const confirmPasswordIsValid = validateConfirmPassword(
@@ -22,6 +24,9 @@ const signUpAction = async ({ request }) => {
 
   let errors = {};
 
+  if (!nameIsValid) {
+    errors.nameErrorMessage = "This field cannot be empty.";
+  }
   if (!emailIsValid) {
     errors.emailErrorMessage = "Enter a valid email.";
   }
@@ -41,6 +46,7 @@ const signUpAction = async ({ request }) => {
   }
 
   if (
+    !nameIsValid ||
     !emailIsValid ||
     !passwordIsValid ||
     !confirmPasswordIsValid ||
@@ -51,6 +57,7 @@ const signUpAction = async ({ request }) => {
   }
 
   const signupData = {
+    name,
     email,
     password,
     confirmPassword,
@@ -71,7 +78,20 @@ const signUpAction = async ({ request }) => {
   }
 
   if (response.status === 422) {
-    console.log(resData.message);
+    resData.errors.errors.forEach((err) => {
+      if (err.path === "name") {
+        errors.nameErrorMessage = err.msg;
+      }
+      if (err.path === "email") {
+        errors.emailErrorMessage = err.msg;
+      }
+      if (err.path === "password") {
+        errors.passwordErrorMessage = err.msg;
+      }
+      if (err.path === "confirmPassword") {
+        errors.confirmPasswordErrorMessage = err.msg;
+      }
+    });
   }
 
   if (response.ok) {

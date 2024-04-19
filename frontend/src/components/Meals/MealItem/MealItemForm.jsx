@@ -1,15 +1,12 @@
 import { useRef, useState } from "react";
-import { cartAddActions } from "../../../store/cart-state";
-import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
+
 import Input from "./Input";
 import "./MealItemForm.css";
 
 const MealItemForm = (props) => {
   const quantityInputRef = useRef();
-
-  const dispatch = useDispatch();
 
   const [quantityIsValid, setQuantityIsValid] = useState(true);
 
@@ -22,8 +19,6 @@ const MealItemForm = (props) => {
       setQuantityIsValid(false);
       return;
     }
-
-    dispatch(cartAddActions.updateTotalQuantity(addInputInt));
 
     props.onAddToCart(addInputInt);
   };

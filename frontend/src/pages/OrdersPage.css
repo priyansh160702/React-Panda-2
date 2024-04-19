@@ -1,0 +1,11 @@
+.orders {
+    background-color: wheat;
+    height: 100vh;
+
+}
+
+.orders h1 {
+    color: black;
+    text-align: center;
+    padding-top: 2rem;
+}

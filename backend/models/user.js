@@ -1,7 +1,8 @@
 const getDb = require("../util/database").getDb;
 
 class User {
-  constructor(email, password) {
+  constructor(name, email, password) {
+    this.name = name;
     this.email = email;
     this.password = password;
     this.isAdmin = false;

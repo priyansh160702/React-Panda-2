@@ -1,12 +1,15 @@
 import { Fragment, useState } from "react";
 import { cartAddActions, modalStateActions } from "../../store/cart-state";
 import { useDispatch, useSelector } from "react-redux";
+
+import Checkout from "./Checkout";
 import Modal from "../../Utility/Modal/Modal";
 import CartItem from "./CartItem";
 import "./Cart.css";
-import Checkout from "./Checkout";
 
 const Cart = () => {
+  const token = localStorage.getItem("token");
+
   const [isOrdering, setIsOrdering] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDoneSubmitting, setIsDoneSubmitting] = useState(false);
@@ -30,6 +33,11 @@ const Cart = () => {
     dispatch(cartAddActions.updateItems({ ...item, quantity: 1 }));
   };
 
+  const order = items.map((item) => ({
+    mealId: item.id,
+    quantity: item.quantity,
+  }));
+
   const cartItem = items.map((item) => (
     <CartItem
       key={item.id}
@@ -45,18 +53,19 @@ const Cart = () => {
     setIsOrdering(true);
   };
 
-  const submitDataHandler = async (userData) => {
+  const submitDataHandler = async (addressData) => {
     setIsSubmitting(true);
-    await fetch(
-      "https://react-panda-3e31b-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          user: userData,
-          order: items,
-        }),
-      }
-    );
+    await fetch("http://localhost:8080/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        addressData,
+        order,
+      }),
+    });
 
     setIsSubmitting(false);
     setIsDoneSubmitting(true);
@@ -76,7 +85,7 @@ const Cart = () => {
       <ul className="items">{cartItem}</ul>
       <div id="amount">
         <span className="amount-heading">Total Amount</span>
-        <span className="total-amount">{totalAmount.toFixed(2)}</span>
+        <span className="total-amount">{totalAmount}</span>
       </div>
       {isOrdering && <Checkout onConfirm={submitDataHandler} />}
       {!isOrdering && (
@@ -85,11 +94,18 @@ const Cart = () => {
             <button onClick={closeCartHandler}>Close</button>
           </div>
           <div>
-            {cartHasItems && (
-              <button className="order-button" onClick={orderButtonHandler}>
-                Order
-              </button>
-            )}
+            <button
+              style={
+                !cartHasItems
+                  ? { background: "grey", border: "none", cursor: "default" }
+                  : {}
+              }
+              disabled={!cartHasItems}
+              className="order-button"
+              onClick={orderButtonHandler}
+            >
+              Order
+            </button>
           </div>
         </div>
       )}

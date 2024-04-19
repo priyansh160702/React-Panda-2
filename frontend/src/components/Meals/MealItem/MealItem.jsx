@@ -20,12 +20,12 @@ const MealItem = (props) => {
       })
     );
 
-    dispatch(
-      cartAddActions.updateTotalAmount({
-        price: props.price,
-        quantity: quantity,
-      })
-    );
+    // dispatch(
+    //   cartAddActions.updateTotalAmount({
+    //     price: props.price,
+    //     quantity: quantity,
+    //   })
+    // );
   };
 
   const editMealHandler = () => {

@@ -4,6 +4,7 @@ import { Link, Form, useActionData, useNavigation } from "react-router-dom";
 import Card from "../Utility/Card";
 
 const SignupPage = () => {
+  const [nameErrorMessage, setNameErrorMessage] = useState(null);
   const [emailErrorMessage, setEmailErrorMessage] = useState(null);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState(null);
   const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] =
@@ -12,16 +13,19 @@ const SignupPage = () => {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
-  const emailInputRef = useRef();
+  const nameInputRef = useRef();
 
   useEffect(() => {
-    emailInputRef.current.focus();
+    nameInputRef.current.focus();
   }, []);
 
   const formData = useActionData();
 
   useEffect(() => {
     if (formData) {
+      if (formData.nameErrorMessage) {
+        setNameErrorMessage(formData.nameErrorMessage);
+      }
       if (formData.emailErrorMessage) {
         setEmailErrorMessage(formData.emailErrorMessage);
       }
@@ -34,6 +38,9 @@ const SignupPage = () => {
     }
   }, [formData]);
 
+  const nameChangeHandler = () => {
+    setNameErrorMessage(null);
+  };
   const emailChangeHandler = () => {
     setEmailErrorMessage(null);
   };
@@ -56,13 +63,25 @@ const SignupPage = () => {
       <div className="form">
         <h3>Signup</h3>
         <Form method="POST" noValidate>
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            onChange={nameChangeHandler}
+            ref={nameInputRef}
+            style={nameErrorMessage ? { border: "1px red solid" } : {}}
+            required
+          />
+          {nameErrorMessage && (
+            <p className="error-message">{nameErrorMessage}</p>
+          )}
           <label htmlFor="email">Email</label>
           <input
             type="email"
             id="email"
             name="email"
             onChange={emailChangeHandler}
-            ref={emailInputRef}
             style={emailErrorMessage ? { border: "1px red solid" } : {}}
             required
           />

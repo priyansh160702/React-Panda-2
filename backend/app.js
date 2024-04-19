@@ -2,6 +2,7 @@ const express = require("express");
 
 const mealsRoutes = require("./routes/meals");
 const authRoutes = require("./routes/auth");
+const orderRoutes = require("./routes/orders");
 const { mongoConnect } = require("./util/database");
 
 const app = express();
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
 
 app.use(mealsRoutes);
 app.use("/auth", authRoutes);
+app.use("/order", orderRoutes);
 
 app.use((error, req, res, next) => {
   let statusCode = error.statusCode || 500;

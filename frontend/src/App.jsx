@@ -11,6 +11,8 @@ import AdminPage from "./pages/AdminPage";
 import fetchMealsLoader from "./Utility/LoaderFunctions/fetchMealsLoader";
 import adminMealsLoader from "./Utility/LoaderFunctions/adminMealsLoader";
 import sendMealDataAction from "./Utility/ActionFunctions/sendDataMealAction";
+import OrdersPage from "./pages/OrdersPage";
+import fetchOrdersLoader from "./Utility/LoaderFunctions/fetchOrdersLoader";
 
 function App() {
   const router = createBrowserRouter([
@@ -26,6 +28,11 @@ function App() {
           element: <AdminPage />,
           loader: adminMealsLoader,
           action: sendMealDataAction,
+        },
+        {
+          path: "orders",
+          element: <OrdersPage />,
+          loader: fetchOrdersLoader,
         },
       ],
     },

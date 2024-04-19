@@ -9,6 +9,7 @@ exports.signUp = async (req, res, next) => {
   try {
     const db = getDb();
 
+    const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
 
@@ -28,7 +29,7 @@ exports.signUp = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const user = new User(email, hashedPassword);
+    const user = new User(name, email, hashedPassword);
 
     await user.save();
 
@@ -77,6 +78,7 @@ exports.login = async (req, res, next) => {
       {
         email: user.email,
         userId: user._id.toString(),
+        userName: user.name,
         isAdmin,
       },
       "somesupersecretlongstring",

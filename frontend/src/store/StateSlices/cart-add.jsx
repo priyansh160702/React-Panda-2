@@ -5,61 +5,40 @@ const cartAddSlice = createSlice({
   initialState: { items: [], totalAmount: 0, totalQuantity: 0 },
   reducers: {
     updateItems(state, action) {
-      const existingItemIndex = state.items.findIndex(
-        (item) => item.id === action.payload.id
-      );
-
-      const existingItem = state.items[existingItemIndex];
-
-      let updatedItems;
+      const { id, price, quantity } = action.payload;
+      const existingItem = state.items.find((item) => item.id === id);
 
       if (existingItem) {
-        const updatedItem = {
-          ...existingItem,
-          quantity: existingItem.quantity + action.payload.quantity,
-        };
-
-        updatedItems = [...state.items];
-        updatedItems[existingItemIndex] = updatedItem;
-
-        state.items = updatedItems;
-        state.totalAmount += existingItem.price;
-        state.totalQuantity = updatedItem.quantity;
+        existingItem.quantity += quantity;
       } else {
-        state.items = state.items.concat(action.payload);
+        state.items.push(action.payload);
       }
-    },
-    updateTotalAmount(state, action) {
-      state.totalAmount += action.payload.price * action.payload.quantity;
-    },
-    updateTotalQuantity(state, action) {
-      state.totalQuantity += action.payload;
+
+      state.totalAmount += price * quantity;
+      state.totalQuantity += quantity;
     },
     removeItem(state, action) {
-      const existingItemIndex = state.items.findIndex(
-        (item) => item.id === action.payload
-      );
+      const id = action.payload;
+      const removedItem = state.items.find((item) => item.id === id);
 
-      const existingItem = state.items[existingItemIndex];
-
-      if (existingItem.quantity === 1) {
-        state.items = state.items.filter((item) => item.id !== action.payload);
-        state.totalQuantity = 0;
-        state.totalAmount = 0;
-      } else {
-        const updatedItem = {
-          ...existingItem,
-          quantity: existingItem.quantity - 1,
-        };
-
-        state.items[existingItemIndex] = updatedItem;
-        state.totalAmount -= existingItem.price;
-        state.totalQuantity = updatedItem.quantity;
+      if (!removedItem) {
+        return;
       }
+
+      if (removedItem.quantity === 1) {
+        state.items = state.items.filter((item) => item.id !== id);
+      } else {
+        removedItem.quantity--;
+      }
+
+      state.totalQuantity--;
+      state.totalAmount -= removedItem.price;
     },
+
     clearCart(state) {
       state.items = [];
       state.totalQuantity = 0;
+      state.totalAmount = 0;
     },
   },
 });
