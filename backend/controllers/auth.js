@@ -76,9 +76,9 @@ exports.login = async (req, res, next) => {
     // Creating the JWT
     const token = jwt.sign(
       {
-        email: user.email,
         userId: user._id.toString(),
         userName: user.name,
+        email: user.email,
         isAdmin,
       },
       "somesupersecretlongstring",
@@ -88,7 +88,6 @@ exports.login = async (req, res, next) => {
     return res.status(200).send({
       message: "Logged In successfully",
       token,
-      userId: user._id.toString(),
     });
   } catch (err) {
     if (!err.statusCode) {

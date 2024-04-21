@@ -6,7 +6,7 @@ import "./Modal.css";
 
 const ModalOverlay = (props) => {
   return (
-    <div className="modal">
+    <div className={`modal ${props.className}`}>
       <div>{props.children}</div>
     </div>
   );
@@ -29,9 +29,11 @@ const port = document.getElementById("overlay");
 const Modal = (props) => {
   return (
     <Fragment>
-      {ReactDOM.createPortal(<Backdrop />, port)}
+      {props.backdrop && ReactDOM.createPortal(<Backdrop />, port)}
       {ReactDOM.createPortal(
-        <ModalOverlay>{props.children}</ModalOverlay>,
+        <ModalOverlay className={props.className}>
+          {props.children}
+        </ModalOverlay>,
         port
       )}
     </Fragment>

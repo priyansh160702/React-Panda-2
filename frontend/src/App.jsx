@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useSelector } from "react-redux";
 
+import Cart from "./components/Cart/Cart";
 import RootLayout from "./components/RootLayout";
 import HomePage from "./pages/HomePage";
 import SignupPage from "./pages/SignupPage";
@@ -13,8 +15,17 @@ import adminMealsLoader from "./Utility/LoaderFunctions/adminMealsLoader";
 import sendMealDataAction from "./Utility/ActionFunctions/sendDataMealAction";
 import OrdersPage from "./pages/OrdersPage";
 import fetchOrdersLoader from "./Utility/LoaderFunctions/fetchOrdersLoader";
+import UserMenu from "./components/UserMenu";
+import useAuth from "./Utility/use-auth";
 
 function App() {
+  const { isLoggedIn } = useAuth();
+
+  const cartIsShown = useSelector((state) => state.modalState.cartIsShown);
+  const userMenuIsShown = useSelector(
+    (state) => state.modalState.userMenuIsShown
+  );
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -40,6 +51,8 @@ function App() {
 
   return (
     <Fragment>
+      {cartIsShown && <Cart />}
+      {userMenuIsShown && isLoggedIn && <UserMenu />}
       <RouterProvider router={router} />
     </Fragment>
   );

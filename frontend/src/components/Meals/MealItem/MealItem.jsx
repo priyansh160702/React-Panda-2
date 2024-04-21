@@ -25,7 +25,7 @@ const MealItem = (props) => {
   };
 
   const editMealHandler = () => {
-    dispatch(modalStateActions.show());
+    dispatch(modalStateActions.show("adminModal"));
 
     props.onEdit({
       id: props.id,

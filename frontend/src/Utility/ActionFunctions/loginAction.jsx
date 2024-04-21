@@ -65,6 +65,7 @@ const loginAction = async ({ request }) => {
   } else {
     localStorage.setItem("userId", userId);
     localStorage.setItem("token", token);
+
     return redirect("/");
   }
 };

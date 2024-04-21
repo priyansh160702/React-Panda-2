@@ -27,7 +27,9 @@ const AdminPage = () => {
   const [descriptionErrorMessage, setDescriptionErrorMessage] = useState(null);
   const [priceErrorMessage, setPriceErrorMessage] = useState(null);
 
-  const modalIsShown = useSelector((state) => state.modalState.modalIsShown);
+  const adminModalIsShown = useSelector(
+    (state) => state.modalState.adminModalIsShown
+  );
 
   const errors = useActionData();
 
@@ -42,10 +44,10 @@ const AdminPage = () => {
   const priceInputRef = useRef();
 
   useEffect(() => {
-    if (modalIsShown) {
+    if (adminModalIsShown) {
       nameInputRef.current.focus();
     }
-  }, [modalIsShown]);
+  }, [adminModalIsShown]);
 
   useEffect(() => {
     if (errors) {
@@ -62,7 +64,7 @@ const AdminPage = () => {
   }, [errors]);
 
   const addMealItemHandler = () => {
-    dispatch(modalStateActions.show());
+    dispatch(modalStateActions.show("adminModal"));
 
     setTitleErrorMessage(null);
 
@@ -99,7 +101,7 @@ const AdminPage = () => {
 
   // Cancel Button
   const cancelButtonHandler = (e) => {
-    dispatch(modalStateActions.hide());
+    dispatch(modalStateActions.hide("adminModal"));
   };
 
   // onChange
@@ -139,13 +141,13 @@ const AdminPage = () => {
     if (hasError || errors) {
       return;
     } else {
-      dispatch(modalStateActions.hide());
+      dispatch(modalStateActions.hide("adminModal"));
     }
   };
 
   return (
     <Fragment>
-      {modalIsShown && (
+      {adminModalIsShown && (
         <Modal>
           <h2>{`${!editMode ? "Add" : "Edit"} Meal`}</h2>
           <Form

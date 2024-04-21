@@ -22,7 +22,7 @@ const Cart = () => {
   const cartHasItems = items.length > 0;
 
   const closeCartHandler = () => {
-    dispatch(modalStateActions.hide());
+    dispatch(modalStateActions.hide("cart"));
   };
 
   const itemRemoveHandler = (id) => {
@@ -114,7 +114,7 @@ const Cart = () => {
   );
 
   return (
-    <Modal>
+    <Modal className="cart-modal" backdrop={true}>
       {!isSubmitting && !isDoneSubmitting && cartModalContent}
       {isSubmitting && submittingModal}
       {isDoneSubmitting && doneSubmittingModal}

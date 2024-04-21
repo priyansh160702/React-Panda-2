@@ -32,7 +32,7 @@ const CartButton = () => {
   }, [items]);
 
   const cartShownHandler = () => {
-    dispatch(modalStateActions.show());
+    dispatch(modalStateActions.show("cart"));
   };
 
   return (

@@ -139,3 +139,11 @@ a {
 .not-admin span {
   color: red;
 }
+
+.py-1 {
+  padding: 1rem 0;
+}
+
+.border-b {
+  border-bottom: 1px solid #b6b2b2;
+}

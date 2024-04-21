@@ -1,50 +1,20 @@
-import { useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import CartButton from "./Cart/CartButton";
 import useAuth from "../Utility/use-auth";
 import image from "../img/meals.jpg";
 import "./Header.css";
+import UserAvatar from "./UserAvatar";
+import TitleSetter from "../Utility/TitleSetter";
 
 const Header = () => {
-  const { logoutHandler, isLoggedIn, isAdmin } = useAuth();
+  TitleSetter();
+
+  const { isLoggedIn, isAdmin } = useAuth();
 
   const navigate = useNavigate();
 
-  const location = useLocation();
-
-  useEffect(() => {
-    switch (location.pathname) {
-      case "/":
-        document.title = "Home";
-        break;
-      case "/about":
-        document.title = "About";
-        break;
-      case "/auth/signup":
-        document.title = "Signup";
-        break;
-      case "/auth/login":
-        document.title = "Login";
-        break;
-      case "/admin":
-        document.title = "Admin";
-        break;
-      case "/orders":
-        document.title = "My Orders";
-        break;
-      default:
-        document.title = "My App";
-    }
-  }, [location.pathname]);
-
   const isAdminPage = location.pathname === "/admin";
   const isOrdersPage = location.pathname === "/orders";
-
-  const logoutBtnHandler = () => {
-    logoutHandler();
-    navigate("/");
-  };
 
   return (
     <header>
@@ -57,7 +27,7 @@ const Header = () => {
           >
             React Panda
           </Link>
-          {isAdmin && (
+          {/* {isAdmin && (
             <Link
               to="admin"
               className="header-link"
@@ -65,26 +35,9 @@ const Header = () => {
             >
               Admin
             </Link>
-          )}
+          )} */}
 
-          {isLoggedIn && !isOrdersPage && (
-            <Link to="orders" className="header-link">
-              Orders
-            </Link>
-          )}
-
-          <div>
-            {isLoggedIn && !isAdminPage && <CartButton />}
-            {isLoggedIn && (
-              <button
-                type="button"
-                className="header-link"
-                onClick={logoutBtnHandler}
-              >
-                Logout
-              </button>
-            )}
-          </div>
+          {isLoggedIn && <UserAvatar isAdminPage={isAdminPage} />}
 
           {!isLoggedIn && (
             <Link
@@ -102,7 +55,7 @@ const Header = () => {
           )}
         </div>
       </nav>
-      {location.pathname !== "/admin" && location.pathname !== "/orders" && (
+      {!isAdminPage && !isOrdersPage && (
         <div className="img">
           <img src={image} />
         </div>

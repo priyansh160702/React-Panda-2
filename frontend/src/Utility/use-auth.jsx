@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, redirect } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 const useAuth = () => {
@@ -7,14 +7,18 @@ const useAuth = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     const fetchToken = () => {
       if (token) {
         const decodedToken = jwtDecode(token);
         const expirationTime = decodedToken.exp * 1000;
+        setUserName(decodedToken.userName);
+        setUserEmail(decodedToken.email);
 
         if (expirationTime > Date.now()) {
           setIsAdmin(decodedToken.isAdmin);
@@ -23,10 +27,14 @@ const useAuth = () => {
           const timeUntilExpiration = expirationTime - Date.now();
           setTimeout(() => {
             logoutHandler();
-            navigate("/auth/login");
+            // navigate("/auth/login");
             console.log("Session timed out");
+            // return redirect("/");
           }, timeUntilExpiration);
         }
+      } else {
+        setIsLoggedIn(false);
+        setIsAdmin(false);
       }
     };
 
@@ -40,7 +48,7 @@ const useAuth = () => {
     setIsLoggedIn(false);
   };
 
-  return { logoutHandler, isLoggedIn, isAdmin };
+  return { logoutHandler, isLoggedIn, isAdmin, userName, userEmail };
 };
 
 export default useAuth;
