@@ -10,7 +10,7 @@ const UserMenu = () => {
   };
 
   return (
-    <Modal className="user-menu">
+    <Modal noBackdrop={true} className="user-menu">
       <div className="user-menu-data">
         <div className="user-data  border-b">
           <h1>{userName}</h1>

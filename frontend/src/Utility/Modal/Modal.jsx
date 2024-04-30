@@ -16,7 +16,9 @@ const Backdrop = () => {
   const dispatch = useDispatch();
 
   const modalCloseHandler = () => {
-    dispatch(modalStateActions.hide());
+    dispatch(modalStateActions.hide("cart"));
+    dispatch(modalStateActions.hide("adminModal"));
+    dispatch(modalStateActions.hide("userMenu"));
   };
 
   return (
@@ -29,7 +31,7 @@ const port = document.getElementById("overlay");
 const Modal = (props) => {
   return (
     <Fragment>
-      {props.backdrop && ReactDOM.createPortal(<Backdrop />, port)}
+      {props.noBackdrop || ReactDOM.createPortal(<Backdrop />, port)}
       {ReactDOM.createPortal(
         <ModalOverlay className={props.className}>
           {props.children}

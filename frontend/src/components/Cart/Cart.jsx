@@ -114,7 +114,7 @@ const Cart = () => {
   );
 
   return (
-    <Modal className="cart-modal" backdrop={true}>
+    <Modal className="cart-modal">
       {!isSubmitting && !isDoneSubmitting && cartModalContent}
       {isSubmitting && submittingModal}
       {isDoneSubmitting && doneSubmittingModal}

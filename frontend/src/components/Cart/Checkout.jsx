@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import classes from "./Checkout.module.css";
 
 const isEmpty = (value) => value.trim() === "";
-const isFiveChars = (value) => value.trim().length === 6;
+const isFiveChars = (value) => value.trim().length === 5;
 
 const Checkout = (props) => {
   const dispatch = useDispatch();
@@ -65,7 +65,7 @@ const Checkout = (props) => {
   }`;
 
   const closeCartHandler = () => {
-    dispatch(modalStateActions.hide());
+    dispatch(modalStateActions.hide("cart"));
   };
 
   return (
