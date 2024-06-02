@@ -56,10 +56,23 @@ const UserAvatar = ({ isAdminPage }) => {
       <Avatar
         onClick={avatarHandler}
         className="avatar"
-        sx={{
-          "&:hover": { cursor: "pointer" },
-          bgcolor: StringToColor(userName),
-        }}
+        sx={
+          userMenuIsShown
+            ? {
+                boxShadow: "0 0 5px 3px #2f2f2f",
+                bgcolor: StringToColor(userName),
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }
+            : {
+                "&:hover": {
+                  cursor: "pointer",
+                  boxShadow: "0 0 5px 3px #2f2f2f",
+                },
+                bgcolor: StringToColor(userName),
+              }
+        }
       >
         {firstLetter}
       </Avatar>

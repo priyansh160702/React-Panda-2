@@ -2,7 +2,6 @@ import { Fragment } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import Cart from "./components/Cart/Cart";
 import RootLayout from "./components/RootLayout";
 import HomePage from "./pages/HomePage";
 import SignupPage from "./pages/SignupPage";
@@ -17,41 +16,46 @@ import OrdersPage from "./pages/OrdersPage";
 import fetchOrdersLoader from "./Utility/LoaderFunctions/fetchOrdersLoader";
 import UserMenu from "./components/UserMenu";
 import useAuth from "./Utility/use-auth";
+import sendOrderDataAction from "./Utility/ActionFunctions/sendOrderDataAction";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+        loader: fetchMealsLoader,
+        action: sendOrderDataAction,
+      },
+      { path: "auth/signup", element: <SignupPage />, action: signUpAction },
+      { path: "auth/login", element: <LoginPage />, action: loginAction },
+      {
+        path: "admin",
+        element: <AdminPage />,
+        loader: adminMealsLoader,
+        action: sendMealDataAction,
+      },
+      {
+        path: "orders",
+        element: <OrdersPage />,
+        loader: fetchOrdersLoader,
+      },
+    ],
+  },
+]);
 
 function App() {
   const { isLoggedIn } = useAuth();
 
-  const cartIsShown = useSelector((state) => state.modalState.cartIsShown);
   const userMenuIsShown = useSelector(
     (state) => state.modalState.userMenuIsShown
   );
 
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <RootLayout />,
-      children: [
-        { index: true, element: <HomePage />, loader: fetchMealsLoader },
-        { path: "auth/signup", element: <SignupPage />, action: signUpAction },
-        { path: "auth/login", element: <LoginPage />, action: loginAction },
-        {
-          path: "admin",
-          element: <AdminPage />,
-          loader: adminMealsLoader,
-          action: sendMealDataAction,
-        },
-        {
-          path: "orders",
-          element: <OrdersPage />,
-          loader: fetchOrdersLoader,
-        },
-      ],
-    },
-  ]);
-
   return (
     <Fragment>
-      {cartIsShown && <Cart />}
+      {/* {cartIsShown && <Cart />} */}
       {userMenuIsShown && isLoggedIn && <UserMenu />}
       <RouterProvider router={router} />
     </Fragment>

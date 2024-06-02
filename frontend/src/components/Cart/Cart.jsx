@@ -1,14 +1,14 @@
 import { Fragment, useState } from "react";
-import { cartAddActions, modalStateActions } from "../../store/cart-state";
 import { useDispatch, useSelector } from "react-redux";
 
+import { cartAddActions, modalStateActions } from "../../store/cart-state";
 import Checkout from "./Checkout";
 import Modal from "../../Utility/Modal/Modal";
 import CartItem from "./CartItem";
 import "./Cart.css";
 
 const Cart = () => {
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
 
   const [isOrdering, setIsOrdering] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,10 +33,10 @@ const Cart = () => {
     dispatch(cartAddActions.updateItems({ ...item, quantity: 1 }));
   };
 
-  const order = items.map((item) => ({
-    mealId: item.id,
-    quantity: item.quantity,
-  }));
+  // const order = items.map((item) => ({
+  //   mealId: item.id,
+  //   quantity: item.quantity,
+  // }));
 
   const cartItem = items.map((item) => (
     <CartItem
@@ -53,24 +53,26 @@ const Cart = () => {
     setIsOrdering(true);
   };
 
-  const submitDataHandler = async (addressData) => {
-    setIsSubmitting(true);
-    await fetch("http://localhost:8080/order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        addressData,
-        order,
-        totalAmount,
-      }),
-    });
+  // const submitDataHandler = async (addressData) => {
+  //   setIsSubmitting(true);
+  //
+  //   );
+  //   // await fetch("http://localhost:8080/order", {
+  //   //   method: "POST",
+  //   //   headers: {
+  //   //     "Content-Type": "application/json",
+  //   //     Authorization: `Bearer ${token}`,
+  //   //   },
+  //   //   body: JSON.stringify({
+  //   //     addressData,
+  //   //     order,
+  //   //     totalAmount,
+  //   //   }),
+  //   // });
 
-    setIsSubmitting(false);
-    setIsDoneSubmitting(true);
-  };
+  //   setIsSubmitting(false);
+  //   setIsDoneSubmitting(true);
+  // };
 
   const submittingModal = <p>Submitting...</p>;
   const doneSubmittingModal = (
@@ -86,9 +88,9 @@ const Cart = () => {
       <ul className="items">{cartItem}</ul>
       <div id="amount">
         <span className="amount-heading">Total Amount</span>
-        <span className="total-amount">{totalAmount}</span>
+        <span className="total-amount">₹{totalAmount}</span>
       </div>
-      {isOrdering && <Checkout onConfirm={submitDataHandler} />}
+      {isOrdering && <Checkout />}
       {!isOrdering && (
         <div id="button">
           <div>
@@ -115,7 +117,7 @@ const Cart = () => {
 
   return (
     <Modal className="cart-modal">
-      {!isSubmitting && !isDoneSubmitting && cartModalContent}
+      {!isDoneSubmitting && cartModalContent}
       {isSubmitting && submittingModal}
       {isDoneSubmitting && doneSubmittingModal}
     </Modal>

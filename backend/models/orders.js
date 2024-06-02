@@ -3,12 +3,25 @@ const mongodb = require("mongodb");
 const getDb = require("../util/database").getDb;
 
 class Order {
-  constructor(order, addressData, totalAmount, userId) {
+  constructor(
+    order,
+    addressData,
+    totalAmount,
+    userId,
+    paymentId,
+    paymentOrderId,
+    paymentSignature
+  ) {
     this.order = order;
     this.addressData = addressData;
     this.totalAmount = totalAmount;
     this.userId = userId;
     this.createdAt = new Date();
+    this.paymentDetails = {
+      paymentId,
+      paymentOrderId,
+      paymentSignature,
+    };
   }
 
   async save() {
@@ -36,7 +49,9 @@ class Order {
           .collection("meals")
           .findOne({ _id: new mongodb.ObjectId(mealId) });
 
-        const { title, price } = mealItem;
+        const title = mealItem?.title;
+        const price = mealItem?.price;
+
         meals.push({ title, price, quantity });
       }
       orderItem.meals = meals;

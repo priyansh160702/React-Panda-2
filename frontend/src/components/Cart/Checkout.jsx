@@ -1,100 +1,72 @@
 import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Form } from "react-router-dom";
+
 import { modalStateActions, cartAddActions } from "../../store/cart-state";
-import { useDispatch } from "react-redux";
 
 import classes from "./Checkout.module.css";
-
-const isEmpty = (value) => value.trim() === "";
-const isFiveChars = (value) => value.trim().length === 5;
 
 const Checkout = (props) => {
   const dispatch = useDispatch();
 
-  const [formInputsValidity, setFormInputsValidity] = useState({
-    name: true,
-    street: true,
-    city: true,
-    postalCode: true,
-  });
+  const items = useSelector((state) => state.cartAdd.items);
+  const totalAmount = useSelector((state) => state.cartAdd.totalAmount);
 
-  const streetInputRef = useRef();
-  const postalCodeInputRef = useRef();
-  const cityInputRef = useRef();
+  // const streetControlClasses = `${classes.control} ${
+  //   formInputsValidity.street ? "" : classes.invalid
+  // }`;
+  // const postalCodeControlClasses = `${classes.control} ${
+  //   formInputsValidity.postalCode ? "" : classes.invalid
+  // }`;
+  // const cityControlClasses = `${classes.control} ${
+  //   formInputsValidity.city ? "" : classes.invalid
+  // }`;
 
-  const confirmHandler = (event) => {
-    event.preventDefault();
-
-    const enteredStreet = streetInputRef.current.value;
-    const enteredPostalCode = postalCodeInputRef.current.value;
-    const enteredCity = cityInputRef.current.value;
-
-    const enteredStreetIsValid = !isEmpty(enteredStreet);
-    const enteredCityIsValid = !isEmpty(enteredCity);
-    const enteredPostalCodeIsValid = isFiveChars(enteredPostalCode);
-
-    setFormInputsValidity({
-      street: enteredStreetIsValid,
-      city: enteredCityIsValid,
-      postalCode: enteredPostalCodeIsValid,
-    });
-
-    const formIsValid =
-      enteredStreetIsValid && enteredCityIsValid && enteredPostalCodeIsValid;
-
-    if (!formIsValid) {
-      return;
-    }
-
-    props.onConfirm({
-      street: enteredStreet,
-      city: enteredCity,
-      postalCode: enteredPostalCode,
-    });
-
-    dispatch(cartAddActions.clearCart());
-  };
-
-  const streetControlClasses = `${classes.control} ${
-    formInputsValidity.street ? "" : classes.invalid
-  }`;
-  const postalCodeControlClasses = `${classes.control} ${
-    formInputsValidity.postalCode ? "" : classes.invalid
-  }`;
-  const cityControlClasses = `${classes.control} ${
-    formInputsValidity.city ? "" : classes.invalid
-  }`;
+  const order = items.map((item) => ({
+    mealId: item.id,
+    quantity: item.quantity,
+  }));
 
   const closeCartHandler = () => {
     dispatch(modalStateActions.hide("cart"));
   };
 
+  const formSubmitHandler = () => {
+    dispatch(modalStateActions.hide("cart"));
+    dispatch(cartAddActions.clearCart());
+  };
+
   return (
-    <form className={classes.form} onSubmit={confirmHandler}>
+    <Form method="POST" className={classes.form} onSubmit={formSubmitHandler}>
       <h2>Address Details</h2>
-      <div className={streetControlClasses}>
-        <div className={cityControlClasses}>
+      <div>
+        <div>
           <label htmlFor="city">City</label>
-          <input type="text" id="city" ref={cityInputRef} />
-          {!formInputsValidity.city && <p>Please enter a valid city!</p>}
+          <input type="text" name="city" id="city" />
+          {/* {!formInputsValidity.city && <p>Please enter a valid city!</p>} */}
         </div>
         <label htmlFor="street">Street</label>
-        <input type="text" id="street" ref={streetInputRef} />
-        {!formInputsValidity.street && <p>Please enter a valid street!</p>}
+        <input type="text" name="street" id="street" />
+        {/* {!formInputsValidity.street && <p>Please enter a valid street!</p>} */}
       </div>
-      <div className={postalCodeControlClasses}>
+      <div>
         <label htmlFor="postal">Postal Code</label>
-        <input type="text" id="postal" ref={postalCodeInputRef} />
-        {!formInputsValidity.postalCode && (
+        <input type="text" name="postal" id="postal" />
+        {/* {!formInputsValidity.postalCode && (
           <p>Please enter a valid postal code (5 characters long)!</p>
-        )}
+        )} */}
       </div>
+      <input type="hidden" name="order" value={JSON.stringify(order)} />
+      <input type="hidden" name="totalAmount" value={totalAmount} />
       <div className={classes.actions}>
         <button type="button" onClick={closeCartHandler}>
           Cancel
         </button>
-        <button className={classes.submit}>Confirm</button>
+        <button type="submit" className={classes.submit}>
+          Confirm
+        </button>
       </div>
-    </form>
+    </Form>
   );
 };
 

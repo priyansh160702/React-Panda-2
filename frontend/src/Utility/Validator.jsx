@@ -18,3 +18,7 @@ export const validateConfirmPassword = (confirmPassword, password) => {
 
   return true;
 };
+
+export const isEmpty = (value) => value.trim() === "";
+
+export const isFiveChars = (value) => value.trim().length === 5;

@@ -3,6 +3,7 @@ const express = require("express");
 const mealsRoutes = require("./routes/meals");
 const authRoutes = require("./routes/auth");
 const orderRoutes = require("./routes/orders");
+
 const { mongoConnect } = require("./util/database");
 
 const app = express();
@@ -25,10 +26,11 @@ app.use("/order", orderRoutes);
 app.use((error, req, res, next) => {
   let statusCode = error.statusCode || 500;
   let message = error.message || "Internal Server Error";
+  console.log(error);
 
   return res.status(statusCode).json({ message });
 });
 
 mongoConnect((client) => {
-  app.listen(8080);
+  app.listen(process.env.PORT);
 });

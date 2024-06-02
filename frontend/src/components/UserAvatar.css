@@ -1,7 +1,10 @@
 .cart-avatar-container {
     display: flex;
+
 }
 
+
 .cart-avatar-container .avatar {
-    margin: auto;
+    margin: 10px;
+
 }
